@@ -83,17 +83,23 @@ export function Simulator() {
 
           <div className="mt-8 border-t pt-6">
             <div className="flex items-center justify-between">
-              <span className="font-medium">Ajustar pela inflação</span>
-              <input
-                type="checkbox"
-                checked={useInflation}
-                onChange={(e) => setUseInflation(e.target.checked)}
-              />
+              <span className="font-medium text-slate-700">Ajustar pela inflação</span>
+              
+              {/* Toggle Switch */}
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  className="sr-only peer"
+                  checked={useInflation}
+                  onChange={(e) => setUseInflation(e.target.checked)}
+                />
+                <div className="w-11 h-6 bg-slate-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#16A34A]"></div>
+              </label>
             </div>
 
             {useInflation && (
-              <div className="mt-4">
-                <label className="block text-sm mb-2">Inflação anual (%)</label>
+              <div className="mt-4 transition-all">
+                <label className="block text-sm mb-2 text-slate-600">Inflação anual (%)</label>
                 <input
                   type="number"
                   value={inflationRate}
@@ -103,7 +109,6 @@ export function Simulator() {
               </div>
             )}
           </div>
-
         </div>
       </div>
 
