@@ -1,10 +1,11 @@
 "use client"
 
-import { useSimulation } from "@/hooks/useSimulation";
-import { ResultCard } from "./ResultCard";
-import { MoneyInput } from "./MoneyInput";
-import { PercentInput } from "@/components/PercentInput"; // Importando seu componente corrigido
-import dynamic from "next/dynamic";
+import { useSimulation } from "@/hooks/useSimulation"
+import { ResultCard } from "./ResultCard"
+import { MoneyInput } from "./MoneyInput"
+import { PercentInput } from "@/components/PercentInput"
+import dynamic from "next/dynamic"
+import { GrowthBadge } from "./GrowthBadge"
 
 function currency(value: number) {
   return new Intl.NumberFormat("pt-BR", {
@@ -14,25 +15,35 @@ function currency(value: number) {
 }
 
 export function Simulator() {
-  const { 
-    input, 
-    result, 
+  const {
+    input,
+    result,
     updateField,
     inflationRate,
     setInflationRate,
     useInflation,
-    setUseInflation
-  } = useSimulation();
+    setUseInflation,
+    totalGrowthPercent,
+    errors,
+    isValid
+  } = useSimulation()
 
   const SimulationChart = dynamic(
     () => import("./SimulationChart").then(mod => mod.SimulationChart),
     { ssr: false }
   )
 
+  const inputStyle = (error?: string) =>
+    `w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 ${
+      error
+        ? "border-red-500 focus:ring-red-500"
+        : "border-slate-300 focus:ring-[#16A34A]"
+    }`
+
   return (
     <div className="grid lg:grid-cols-2 gap-12">
-      
-      {/* Coluna de Inputs */}
+
+      {/* Coluna Inputs */}
       <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
         <h1 className="text-2xl font-semibold mb-8">
           Simulador de Juros Compostos
@@ -40,48 +51,74 @@ export function Simulator() {
 
         <div className="space-y-6">
 
+          {/* Capital Inicial */}
           <div>
             <label className="block text-sm mb-2">Capital Inicial</label>
             <MoneyInput
               value={input.initialAmount}
               onChange={(value) => updateField("initialAmount", value)}
-              className="w-full border border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#16A34A]"
+              className={inputStyle(errors.initialAmount)}
             />
+            {errors.initialAmount && (
+              <p className="text-sm text-red-500 mt-1">
+                {errors.initialAmount}
+              </p>
+            )}
           </div>
 
-          {/* --- SUBSTITUIÇÃO 1: Taxa Anual --- */}
+          {/* Taxa Anual */}
           <div>
-            <label className="block text-sm mb-2 text-slate-700">Taxa Anual (%)</label>
+            <label className="block text-sm mb-2">Taxa Anual (%)</label>
             <PercentInput
               value={input.annualRate}
               onChange={(value) => updateField("annualRate", value)}
-              className="w-full border border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#16A34A]"
+              className={inputStyle(errors.annualRate)}
             />
+            {errors.annualRate && (
+              <p className="text-sm text-red-500 mt-1">
+                {errors.annualRate}
+              </p>
+            )}
           </div>
 
+          {/* Aporte Mensal */}
           <div>
             <label className="block text-sm mb-2">Aporte Mensal</label>
             <MoneyInput
               value={input.monthlyContribution}
               onChange={(value) => updateField("monthlyContribution", value)}
-              className="w-full border border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#16A34A]"
+              className={inputStyle(errors.monthlyContribution)}
             />
+            {errors.monthlyContribution && (
+              <p className="text-sm text-red-500 mt-1">
+                {errors.monthlyContribution}
+              </p>
+            )}
           </div>
 
+          {/* Tempo */}
           <div>
             <label className="block text-sm mb-2">Tempo (anos)</label>
             <input
               type="number"
               value={input.years}
               onChange={e => updateField("years", Number(e.target.value))}
-              className="w-full border border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#16A34A]"
+              className={inputStyle(errors.years)}
             />
+            {errors.years && (
+              <p className="text-sm text-red-500 mt-1">
+                {errors.years}
+              </p>
+            )}
           </div>
 
+          {/* Inflação */}
           <div className="mt-8 border-t pt-6">
             <div className="flex items-center justify-between">
-              <span className="font-medium text-slate-700">Ajustar pela inflação</span>
-              
+              <span className="font-medium text-slate-700">
+                Ajustar pela inflação
+              </span>
+
               <label className="relative inline-flex items-center cursor-pointer">
                 <input
                   type="checkbox"
@@ -89,38 +126,62 @@ export function Simulator() {
                   checked={useInflation}
                   onChange={(e) => setUseInflation(e.target.checked)}
                 />
-                <div className="w-11 h-6 bg-slate-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#16A34A]"></div>
+                <div className="w-11 h-6 bg-slate-200 rounded-full peer
+                  peer-checked:after:translate-x-full
+                  after:content-[''] after:absolute after:top-[2px]
+                  after:left-[2px] after:bg-white after:border
+                  after:border-slate-300 after:rounded-full
+                  after:h-5 after:w-5 after:transition-all
+                  peer-checked:bg-[#16A34A]" />
               </label>
             </div>
 
             {useInflation && (
-              <div className="mt-4 transition-all">
-                <label className="block text-sm mb-2 text-slate-600">Inflação anual (%)</label>
-                {/* --- SUBSTITUIÇÃO 2: Inflação Anual --- */}
+              <div className="mt-4">
+                <label className="block text-sm mb-2 text-slate-600">
+                  Inflação anual (%)
+                </label>
                 <PercentInput
                   value={inflationRate}
                   onChange={(value) => setInflationRate(value)}
-                  className="w-full border border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#16A34A]"
+                  className={inputStyle(errors.inflationRate)}
                 />
+                {errors.inflationRate && (
+                  <p className="text-sm text-red-500 mt-1">
+                    {errors.inflationRate}
+                  </p>
+                )}
               </div>
             )}
           </div>
         </div>
       </div>
 
-      {/* Coluna de Resultados */}
+      {/* Coluna Resultados */}
       <div className="grid gap-6">
-        <ResultCard label="Valor Final" value={currency(result.finalAmount)} />
-        <ResultCard label="Total Investido" value={currency(result.totalInvested)} />
-        <ResultCard label="Total em Juros" value={currency(result.totalInterest)} />
+        <ResultCard
+          label="Valor Final"
+          value={currency(result.finalAmount)}
+          extra={<GrowthBadge value={totalGrowthPercent} />}
+        />
+        <ResultCard
+          label="Total Investido"
+          value={currency(result.totalInvested)}
+        />
+        <ResultCard
+          label="Total em Juros"
+          value={currency(result.totalInterest)}
+        />
         <ResultCard
           label="Taxa Mensal Equivalente"
           value={(result.monthlyRate * 100).toFixed(4) + "%"}
         />
 
-        <div className="lg:col-span-2 mt-8">
-          <SimulationChart data={result.history} />
-        </div>
+        {isValid && result.history.length > 0 && (
+          <div className="lg:col-span-2 mt-8">
+            <SimulationChart data={result.history} />
+          </div>
+        )}
       </div>
     </div>
   )
