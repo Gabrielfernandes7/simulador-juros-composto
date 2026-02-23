@@ -2,9 +2,9 @@
 
 import { useSimulation } from "@/hooks/useSimulation";
 import { ResultCard } from "./ResultCard";
-
-import dynamic from "next/dynamic"
-
+import { MoneyInput } from "./MoneyInput";
+import { PercentInput } from "@/components/PercentInput"; // Importando seu componente corrigido
+import dynamic from "next/dynamic";
 
 function currency(value: number) {
   return new Intl.NumberFormat("pt-BR", {
@@ -14,7 +14,6 @@ function currency(value: number) {
 }
 
 export function Simulator() {
-  
   const { 
     input, 
     result, 
@@ -43,30 +42,28 @@ export function Simulator() {
 
           <div>
             <label className="block text-sm mb-2">Capital Inicial</label>
-            <input
-              type="number"
+            <MoneyInput
               value={input.initialAmount}
-              onChange={e => updateField("initialAmount", Number(e.target.value))}
+              onChange={(value) => updateField("initialAmount", value)}
               className="w-full border border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#16A34A]"
             />
           </div>
 
+          {/* --- SUBSTITUIÇÃO 1: Taxa Anual --- */}
           <div>
-            <label className="block text-sm mb-2">Taxa Anual (%)</label>
-            <input
-              type="number"
+            <label className="block text-sm mb-2 text-slate-700">Taxa Anual (%)</label>
+            <PercentInput
               value={input.annualRate}
-              onChange={e => updateField("annualRate", Number(e.target.value))}
+              onChange={(value) => updateField("annualRate", value)}
               className="w-full border border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#16A34A]"
             />
           </div>
 
           <div>
             <label className="block text-sm mb-2">Aporte Mensal</label>
-            <input
-              type="number"
+            <MoneyInput
               value={input.monthlyContribution}
-              onChange={e => updateField("monthlyContribution", Number(e.target.value))}
+              onChange={(value) => updateField("monthlyContribution", value)}
               className="w-full border border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#16A34A]"
             />
           </div>
@@ -85,7 +82,6 @@ export function Simulator() {
             <div className="flex items-center justify-between">
               <span className="font-medium text-slate-700">Ajustar pela inflação</span>
               
-              {/* Toggle Switch */}
               <label className="relative inline-flex items-center cursor-pointer">
                 <input
                   type="checkbox"
@@ -100,10 +96,10 @@ export function Simulator() {
             {useInflation && (
               <div className="mt-4 transition-all">
                 <label className="block text-sm mb-2 text-slate-600">Inflação anual (%)</label>
-                <input
-                  type="number"
+                {/* --- SUBSTITUIÇÃO 2: Inflação Anual --- */}
+                <PercentInput
                   value={inflationRate}
-                  onChange={(e) => setInflationRate(Number(e.target.value))}
+                  onChange={(value) => setInflationRate(value)}
                   className="w-full border border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#16A34A]"
                 />
               </div>
@@ -114,18 +110,9 @@ export function Simulator() {
 
       {/* Coluna de Resultados */}
       <div className="grid gap-6">
-        <ResultCard
-          label="Valor Final"
-          value={currency(result.finalAmount)}
-        />
-        <ResultCard
-          label="Total Investido"
-          value={currency(result.totalInvested)}
-        />
-        <ResultCard
-          label="Total em Juros"
-          value={currency(result.totalInterest)}
-        />
+        <ResultCard label="Valor Final" value={currency(result.finalAmount)} />
+        <ResultCard label="Total Investido" value={currency(result.totalInvested)} />
+        <ResultCard label="Total em Juros" value={currency(result.totalInterest)} />
         <ResultCard
           label="Taxa Mensal Equivalente"
           value={(result.monthlyRate * 100).toFixed(4) + "%"}
@@ -135,7 +122,6 @@ export function Simulator() {
           <SimulationChart data={result.history} />
         </div>
       </div>
-
     </div>
   )
 }
