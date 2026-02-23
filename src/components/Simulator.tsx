@@ -1,7 +1,11 @@
 "use client"
 
-import { useSimulation } from "@/hooks/useSimulation"
-import { ResultCard } from "./ResultCard"
+import { useSimulation } from "@/hooks/useSimulation";
+import { ResultCard } from "./ResultCard";
+
+import dynamic from "next/dynamic"
+
+import { useState } from "react"
 
 function currency(value: number) {
   return new Intl.NumberFormat("pt-BR", {
@@ -11,7 +15,13 @@ function currency(value: number) {
 }
 
 export function Simulator() {
-  const { input, result, updateField } = useSimulation()
+  const { input, result, updateField } = useSimulation();
+  const [compare, setCompare] = useState(false);
+
+  const SimulationChart = dynamic(
+    () => import("./SimulationChart").then(mod => mod.SimulationChart),
+    { ssr: false }
+  )
 
   return (
     <div className="grid lg:grid-cols-2 gap-12">
@@ -85,6 +95,10 @@ export function Simulator() {
           label="Taxa Mensal Equivalente"
           value={(result.monthlyRate * 100).toFixed(4) + "%"}
         />
+
+        <div className="lg:col-span-2 mt-8">
+          <SimulationChart data={result.history} />
+        </div>
       </div>
 
     </div>

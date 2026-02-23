@@ -6,7 +6,9 @@ export function convertAnnualToMonthlyRate(annualRate: number): number {
 }
 
 export function simulateCompoundInterest(input: SimulationInput): SimulationResult {
+
   const { initialAmount, annualRate, monthlyContribution, years } = input
+
 
   const totalMonths = years * 12
   const monthlyRate = convertAnnualToMonthlyRate(annualRate)
@@ -35,4 +37,13 @@ export function simulateCompoundInterest(input: SimulationInput): SimulationResu
     monthlyRate,
     history
   }
+}
+
+export function calculateRealAnnualRate(
+  nominalRate: number,
+  inflationRate: number
+): number {
+  const nominal = nominalRate / 100
+  const inflation = inflationRate / 100
+  return ((1 + nominal) / (1 + inflation) - 1) * 100
 }

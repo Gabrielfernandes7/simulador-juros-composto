@@ -3,6 +3,7 @@ export interface SimulationInput {
   annualRate: number
   monthlyContribution: number
   years: number
+  inflationRate?: number // opcional (% anual)
 }
 
 export interface SimulationMonth {
@@ -17,5 +18,7 @@ export interface SimulationResult {
   totalInvested: number
   totalInterest: number
   monthlyRate: number
+  realFinalAmount?: number
+  realTotalInterest?: number
   history: SimulationMonth[]
 }
