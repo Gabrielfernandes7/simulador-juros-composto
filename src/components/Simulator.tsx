@@ -5,7 +5,6 @@ import { ResultCard } from "./ResultCard";
 
 import dynamic from "next/dynamic"
 
-import { useState } from "react"
 
 function currency(value: number) {
   return new Intl.NumberFormat("pt-BR", {
@@ -15,8 +14,16 @@ function currency(value: number) {
 }
 
 export function Simulator() {
-  const { input, result, updateField } = useSimulation();
-  const [compare, setCompare] = useState(false);
+  
+  const { 
+    input, 
+    result, 
+    updateField,
+    inflationRate,
+    setInflationRate,
+    useInflation,
+    setUseInflation
+  } = useSimulation();
 
   const SimulationChart = dynamic(
     () => import("./SimulationChart").then(mod => mod.SimulationChart),
@@ -72,6 +79,29 @@ export function Simulator() {
               onChange={e => updateField("years", Number(e.target.value))}
               className="w-full border border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#16A34A]"
             />
+          </div>
+
+          <div className="mt-8 border-t pt-6">
+            <div className="flex items-center justify-between">
+              <span className="font-medium">Ajustar pela inflação</span>
+              <input
+                type="checkbox"
+                checked={useInflation}
+                onChange={(e) => setUseInflation(e.target.checked)}
+              />
+            </div>
+
+            {useInflation && (
+              <div className="mt-4">
+                <label className="block text-sm mb-2">Inflação anual (%)</label>
+                <input
+                  type="number"
+                  value={inflationRate}
+                  onChange={(e) => setInflationRate(Number(e.target.value))}
+                  className="w-full border border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#16A34A]"
+                />
+              </div>
+            )}
           </div>
 
         </div>

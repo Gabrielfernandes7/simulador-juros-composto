@@ -2,12 +2,13 @@
 
 import { useMemo, useState } from "react"
 import { simulateCompoundInterest } from "@/lib/compound"
+import { calculateRealRate } from "@/lib/inflation"
 import { SimulationInput, SimulationResult } from "@/types/simulation"
 
 const defaultInput: SimulationInput = {
-  initialAmount: 1000,
-  annualRate: 12,
-  monthlyContribution: 500,
+  initialAmount: 1000.0,
+  annualRate: 12.0,
+  monthlyContribution: 500.0,
   years: 5
 }
 
@@ -17,9 +18,20 @@ export function useSimulation(initialValues?: Partial<SimulationInput>) {
     ...initialValues
   })
 
+  const [inflationRate, setInflationRate] = useState(4)
+  const [useInflation, setUseInflation] = useState(false)
+
   const result: SimulationResult = useMemo(() => {
-    return simulateCompoundInterest(input)
-  }, [input])
+    const adjustedRate = useInflation
+      ? calculateRealRate(input.annualRate, inflationRate)
+      : input.annualRate
+
+    return simulateCompoundInterest({
+      ...input,
+      annualRate: adjustedRate
+    })
+
+  }, [input, inflationRate, useInflation])
 
   function updateField<K extends keyof SimulationInput>(
     field: K,
@@ -34,6 +46,10 @@ export function useSimulation(initialValues?: Partial<SimulationInput>) {
   return {
     input,
     result,
-    updateField
+    updateField,
+    inflationRate,
+    setInflationRate,
+    useInflation,
+    setUseInflation
   }
 }

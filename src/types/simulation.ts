@@ -22,3 +22,8 @@ export interface SimulationResult {
   realTotalInterest?: number
   history: SimulationMonth[]
 }
+
+export interface SimulationOptions {
+  inflationRate?: number
+  useInflation?: boolean
+}
