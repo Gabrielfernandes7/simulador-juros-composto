@@ -45,9 +45,9 @@ export function Simulator() {
 
       {/* Coluna Inputs */}
       <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
-        <h1 className="text-2xl font-semibold mb-8">
-          Simulador de Juros Compostos
-        </h1>
+        <h2 className="text-2xl font-semibold mb-8 text-slate-800">
+          Simulação de Investimento
+        </h2>
 
         <div className="space-y-6">
 
