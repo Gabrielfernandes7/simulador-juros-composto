@@ -73,7 +73,7 @@ export default function Home() {
       {/* FAQ */}
       <section className="max-w-3xl mx-auto px-6 pb-24">
         <h2 className="text-2xl font-semibold mb-8">
-          Perguntas frequentes sobre juros compostos
+          Perguntas frequentes sobre juros compostos (FAQ)
         </h2>
 
         <div className="space-y-8">
@@ -139,7 +139,6 @@ export default function Home() {
           })
         }}
       />
-
     </main>
   )
 }

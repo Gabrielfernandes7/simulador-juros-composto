@@ -40,6 +40,24 @@ export default function BlogPage() {
             </Link>
           </article>
 
+          <article className="bg-white border border-slate-200 rounded-xl p-6">
+            <h2 className="text-xl font-semibold mb-2">
+              Juros Simples vs Juros Compostos
+            </h2>
+
+            <p className="text-slate-600 mb-4">
+              Entenda o conceito de juros compostos, como funciona o crescimento exponencial
+              e por que ele é fundamental para investimentos de longo prazo.
+            </p>
+
+            <Link
+              href="/blog/o-que-sao-juros-compostos"
+              className="text-blue-600 font-medium"
+            >
+              Ler artigo completo →
+            </Link>
+          </article>
+
         </div>
       </section>
     </main>
