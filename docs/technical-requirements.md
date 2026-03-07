@@ -2,8 +2,6 @@
 
 Este documento descreve os requisitos técnicos e princípios de arquitetura utilizados no projeto.
 
----
-
 # Stack Tecnológica
 
 | Camada      | Tecnologia           |
@@ -16,8 +14,6 @@ Este documento descreve os requisitos técnicos e princípios de arquitetura uti
 
 > [!IMPORTANT]
 > Toda regra de domínio financeiro deve permanecer **independente da interface**.
-
----
 
 # Arquitetura do Projeto
 
@@ -44,8 +40,6 @@ Responsabilidade de cada diretório:
 > [!NOTE]
 > O diretório `/lib` representa o **core matemático da aplicação**.
 
----
-
 # Princípios de Engenharia
 
 O projeto segue os seguintes princípios:
@@ -64,8 +58,6 @@ Hooks
 Core financeiro (/lib)
 ```
 
----
-
 ### Isolamento do Domínio Financeiro
 
 As regras matemáticas devem ser:
@@ -73,8 +65,6 @@ As regras matemáticas devem ser:
 * independentes de React
 * testáveis isoladamente
 * reutilizáveis
-
----
 
 ### Tipagem Forte
 
@@ -89,8 +79,6 @@ Exemplo:
 function simulateCompound(input: SimulationInput): SimulationResult
 ```
 
----
-
 # Motor de Simulação Financeira
 
 A aplicação possui um motor responsável por calcular o crescimento do investimento.
@@ -103,8 +91,6 @@ Responsabilidades do motor:
 * calcular crescimento percentual
 * considerar inflação (taxa real)
 
----
-
 ## Conversão de Taxa
 
 Conversão correta de taxa anual para mensal:
@@ -116,8 +102,6 @@ monthlyRate = (1 + annualRate)^(1/12) - 1
 > [!IMPORTANT]
 > Nunca dividir taxa anual por 12.
 > A conversão deve respeitar juros compostos.
-
----
 
 # Estrutura de Resultado da Simulação
 
@@ -140,8 +124,6 @@ Campos esperados:
 | historicoMensal       | evolução mês a mês           |
 | valorFinalReal        | valor ajustado pela inflação |
 
----
-
 # Interface da Aplicação
 
 A interface é responsável apenas por **apresentar resultados e coletar inputs**.
@@ -159,8 +141,6 @@ Componentes principais:
 | ResultCards     | exibição dos resultados principais  |
 | InvestmentChart | gráfico de evolução do investimento |
 | SimulationForm  | entrada de dados da simulação       |
-
----
 
 # Visualização de Dados
 
@@ -181,8 +161,6 @@ Objetivo:
 * reduzir bundle inicial
 * melhorar performance
 
----
-
 # Testes (Planejado)
 
 > [!WARNING]
@@ -201,8 +179,6 @@ Arquivos a serem testados:
 /lib/tax.ts
 /lib/goal.ts
 ```
-
----
 
 # Critérios de Qualidade
 
