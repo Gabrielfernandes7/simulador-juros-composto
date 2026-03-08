@@ -1,38 +1,158 @@
-# Micro SaaS - Simulador Juros Composto
+# Simulador de Juros Compostos
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Aplicação web para simulação de investimentos com juros compostos, aportes mensais e análise de crescimento patrimonial.
 
-## Iniciando projeto
+O objetivo do projeto é oferecer uma ferramenta simples e visual para planejamento financeiro, permitindo ao usuário compreender como seu patrimônio evolui ao longo do tempo.
 
-First, run the development server:
+---
+
+# Funcionalidades
+
+* Simulação de juros compostos
+* Aportes mensais
+* Histórico de crescimento mês a mês
+* Visualização gráfica da evolução do investimento
+* Simulação considerando inflação
+* Comparação de cenários de investimento
+
+---
+
+# Tecnologias Utilizadas
+
+| Camada      | Tecnologia           |
+| ----------- | -------------------- |
+| Framework   | Next.js (App Router) |
+| Linguagem   | TypeScript           |
+| Estilização | Tailwind CSS         |
+| Gráficos    | Recharts             |
+
+---
+
+# Arquitetura do Projeto
+
+A aplicação segue uma arquitetura modular separando domínio financeiro da interface.
+
+```id="a5d1f7"
+src/
+ ├── app
+ ├── components
+ ├── hooks
+ ├── lib
+ └── types
+```
+
+Descrição dos diretórios:
+
+| Diretório     | Responsabilidade                         |
+| ------------- | ---------------------------------------- |
+| `/lib`        | regras de negócio e cálculos financeiros |
+| `/hooks`      | gerenciamento de estado da aplicação     |
+| `/components` | componentes reutilizáveis da interface   |
+| `/types`      | tipagens globais                         |
+
+---
+
+# Motor Financeiro
+
+O core da aplicação implementa:
+
+* conversão correta de taxa anual para mensal
+* cálculo de juros compostos
+* simulação mês a mês
+* cálculo de crescimento percentual
+* ajuste por inflação
+
+> [!IMPORTANT]
+> Todas as regras matemáticas são isoladas da interface para permitir testes e reutilização.
+
+---
+
+# Executando o Projeto
+
+## Pré-requisitos
+
+* Node.js 18+
+* npm ou pnpm
+
+---
+
+## Instalação
+
+Clone o repositório:
+
+```bash
+git clone https://github.com/seu-repositorio/simulador-juros-compostos.git
+```
+
+Entre na pasta do projeto:
+
+```bash
+cd simulador-juros-compostos
+```
+
+Instale as dependências:
+
+```bash
+npm install
+```
+
+---
+
+## Rodando em ambiente de desenvolvimento
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abra no navegador:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+# Estrutura da Documentação
 
-To learn more about Next.js, take a look at the following resources:
+Documentação técnica disponível em:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+docs/
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Arquivos principais:
 
-## Deploy on Vercel
+* `product-overview.md`
+* `technical-requirements.md`
+* `development-roadmap.md`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# Roadmap do Produto
+
+Principais evoluções planejadas:
+
+* simulação comparativa
+* cálculo de metas financeiras
+* otimizações de performance
+* estratégia SEO
+* monetização com anúncios
+* versão premium
+
+---
+
+# Status do Projeto
+
+> [!NOTE]
+> O projeto encontra-se em desenvolvimento ativo.
+
+Próxima etapa:
+
+* consolidação do motor financeiro
+* implementação de testes unitários
+
+---
+
+# Licença
+
+Este projeto é distribuído sob a licença MIT.
