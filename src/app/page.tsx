@@ -1,8 +1,37 @@
-import { Simulator } from "@/components/Simulator"
+import { Simulator } from "@/components/Simulator/Simulator"
+import Link from "next/link"
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-[#F8FAF9] text-[#0F172A]">
+      <nav className="border-b bg-white">
+  <div className="max-w-6xl mx-auto px-4 flex items-center justify-between h-16">
+    
+    <span className="font-semibold">
+      Calculadora de Investimentos
+    </span>
+
+    <div className="flex gap-6 text-sm">
+
+      <Link href="/simulador-juros-compostos">
+        Juros Compostos
+      </Link>
+
+      <Link href="/simulador-aporte-mensal">
+        Aporte Mensal
+      </Link>
+
+      <Link href="/simulador-renda-passiva">
+        Renda Passiva
+      </Link>
+
+      <Link href="/simulador-valor-futuro">
+        Valor Futuro
+      </Link>
+
+    </div>
+  </div>
+</nav>
 
       {/* HERO */}
       <section className="max-w-4xl mx-auto px-6 pt-20 pb-12 text-center">

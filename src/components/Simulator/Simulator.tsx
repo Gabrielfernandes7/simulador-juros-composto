@@ -1,11 +1,11 @@
 "use client"
 
 import { useSimulation } from "@/hooks/useSimulation"
-import { ResultCard } from "./ResultCard"
-import { MoneyInput } from "./MoneyInput"
+import { ResultCard } from "../ResultCard"
+import { MoneyInput } from "../MoneyInput"
 import { PercentInput } from "@/components/PercentInput"
 import dynamic from "next/dynamic"
-import { GrowthBadge } from "./GrowthBadge"
+import { GrowthBadge } from "../GrowthBadge"
 
 function currency(value: number) {
   return new Intl.NumberFormat("pt-BR", {
@@ -14,7 +14,7 @@ function currency(value: number) {
   }).format(value)
 }
 
-export function Simulator() {
+export const Simulator = () => {
   const {
     input,
     result,
@@ -29,7 +29,7 @@ export function Simulator() {
   } = useSimulation()
 
   const SimulationChart = dynamic(
-    () => import("./SimulationChart").then(mod => mod.SimulationChart),
+    () => import("../SimulationChart").then(mod => mod.SimulationChart),
     { ssr: false }
   )
 
