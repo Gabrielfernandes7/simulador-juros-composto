@@ -1,14 +1,56 @@
 import { Simulator } from "@/components/Simulator"
+import Link from "next/link"
 
 export const metadata = {
   title: "Simulador de Aporte Mensal | Calcule seus Investimentos com Juros Compostos",
   description:
-    "Descubra quanto seus aportes mensais podem crescer ao longo do tempo utilizando juros compostos. Simule investimentos com capital inicial, aportes mensais e taxa anual.",
+    "Simule quanto seus aportes mensais podem crescer com juros compostos. Descubra quanto investir por mês e veja a evolução do seu patrimônio ao longo do tempo.",
+  alternates: {
+    canonical: "https://simulador-juros-composto.vercel.app/simulador-aporte-mensal",
+  },
+  openGraph: {
+    title: "Simulador de Aporte Mensal",
+    description:
+      "Calcule quanto seus aportes mensais podem render ao longo do tempo com juros compostos.",
+    url: "https://simulador-juros-composto.vercel.app/simulador-aporte-mensal",
+    siteName: "Simulador de Juros",
+    type: "website",
+  },
 }
 
 export default function Page() {
   return (
     <main className="min-h-screen bg-[#F8FAF9] text-[#0F172A]">
+
+      {/* NAVBAR */}
+      <nav className="border-b bg-white">
+        <div className="max-w-6xl mx-auto px-4 flex items-center justify-between h-16">
+
+          <span className="font-semibold">
+            Calculadora de Investimentos
+          </span>
+
+          <div className="flex gap-6 text-sm">
+
+            <Link href="/simulador-juros-compostos">
+              Juros Compostos
+            </Link>
+
+            <Link href="/simulador-aporte-mensal">
+              Aporte Mensal
+            </Link>
+
+            <Link href="/simulador-renda-passiva">
+              Renda Passiva
+            </Link>
+
+            <Link href="/simulador-valor-futuro">
+              Valor Futuro
+            </Link>
+
+          </div>
+        </div>
+      </nav>
 
       {/* HERO */}
       <section className="max-w-4xl mx-auto px-6 pt-20 pb-12 text-center">
@@ -33,9 +75,9 @@ export default function Page() {
         </h2>
 
         <Simulator
-            showInitialAmount={false}
-            showInflation={false}
-            initialValues={{ initialAmount: 0 }}
+          showInitialAmount={false}
+          showInflation={false}
+          initialValues={{ initialAmount: 0 }}
         />
 
       </section>
@@ -49,32 +91,31 @@ export default function Page() {
 
         <p className="text-slate-700 leading-relaxed mb-6">
           Aporte mensal é o valor que você investe regularmente todos os meses
-          em um investimento. Esse hábito é uma das formas mais eficientes de
-          construir patrimônio ao longo do tempo.
+          em um investimento. Esse hábito é uma das estratégias mais eficientes
+          para construir patrimônio no longo prazo.
         </p>
 
         <p className="text-slate-700 leading-relaxed mb-6">
-          Quando os aportes mensais são combinados com juros compostos,
-          o crescimento do patrimônio se torna exponencial. Isso acontece
-          porque os rendimentos passam a gerar novos rendimentos ao longo
-          do tempo.
+          Ao investir mensalmente, você aumenta seu capital gradualmente,
+          permitindo que os rendimentos se acumulem ao longo do tempo.
+          Essa estratégia é amplamente utilizada por investidores que
+          buscam crescimento consistente.
         </p>
 
         <h2 className="text-2xl font-semibold mt-12 mb-6">
-          Por que investir mensalmente?
+          Como os juros compostos ajudam no crescimento do investimento?
         </h2>
 
         <p className="text-slate-700 leading-relaxed mb-6">
-          Investir todos os meses cria disciplina financeira e permite
-          aproveitar o poder dos juros compostos. Mesmo valores pequenos,
-          quando investidos regularmente, podem gerar um patrimônio
-          significativo no longo prazo.
+          Juros compostos são os rendimentos gerados não apenas sobre o
+          capital inicial, mas também sobre os rendimentos acumulados
+          ao longo do tempo.
         </p>
 
         <p className="text-slate-700 leading-relaxed">
-          O simulador acima permite visualizar exatamente quanto seu
-          patrimônio pode crescer com diferentes valores de aporte
-          mensal e taxas de rendimento.
+          Quando combinados com aportes mensais, os juros compostos criam
+          um efeito de crescimento exponencial. Quanto maior o tempo de
+          investimento, maior tende a ser o crescimento do patrimônio.
         </p>
 
       </section>
@@ -89,21 +130,21 @@ export default function Page() {
         <ul className="space-y-3 text-green-700 font-medium">
 
           <li>
-            <a href="/simulador-juros-compostos" className="hover:underline">
+            <Link href="/simulador-juros-compostos" className="hover:underline">
               Simulador de Juros Compostos
-            </a>
+            </Link>
           </li>
 
           <li>
-            <a href="/simulador-inflacao-investimentos" className="hover:underline">
+            <Link href="/simulador-inflacao-investimentos" className="hover:underline">
               Simulador de Investimentos com Inflação
-            </a>
+            </Link>
           </li>
 
           <li>
-            <a href="/calculadora-renda-passiva" className="hover:underline">
+            <Link href="/calculadora-renda-passiva" className="hover:underline">
               Calculadora de Renda Passiva
-            </a>
+            </Link>
           </li>
 
         </ul>
@@ -137,9 +178,9 @@ export default function Page() {
             </h3>
 
             <p className="text-slate-600 mt-2 leading-relaxed">
-              Sim. O mais importante é a constância. Investimentos
-              regulares permitem aproveitar o crescimento exponencial
-              dos juros compostos ao longo do tempo.
+              Sim. Mesmo valores pequenos podem gerar crescimento
+              significativo quando investidos regularmente ao longo
+              de vários anos.
             </p>
           </div>
 
@@ -151,13 +192,30 @@ export default function Page() {
             <p className="text-slate-600 mt-2 leading-relaxed">
               Sim. Cada novo aporte aumenta o capital investido,
               permitindo que os juros compostos atuem sobre
-              um valor maior a cada mês.
+              um valor maior ao longo do tempo.
             </p>
           </div>
 
         </div>
 
       </section>
+
+      {/* SCHEMA WEB APPLICATION */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebApplication",
+            "name": "Simulador de Aporte Mensal",
+            "applicationCategory": "FinanceApplication",
+            "operatingSystem": "Web",
+            "url": "https://simulador-juros-composto.vercel.app/simulador-aporte-mensal",
+            "description":
+              "Ferramenta online para simular investimentos com aportes mensais e juros compostos."
+          })
+        }}
+      />
 
       {/* FAQ SCHEMA */}
       <script
@@ -172,7 +230,7 @@ export default function Page() {
                 "name": "Quanto devo investir por mês?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "O valor ideal depende da renda e dos objetivos financeiros. Muitos especialistas sugerem investir entre 10% e 20% da renda mensal."
+                  "text": "O valor depende da renda e dos objetivos financeiros. Muitos especialistas sugerem investir entre 10% e 20% da renda mensal."
                 }
               },
               {
@@ -180,7 +238,15 @@ export default function Page() {
                 "name": "Vale a pena investir pequenos valores mensalmente?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "Sim. Mesmo valores pequenos podem gerar crescimento significativo quando investidos regularmente ao longo do tempo."
+                  "text": "Sim. Investimentos pequenos, quando feitos regularmente, podem crescer significativamente ao longo do tempo."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "O que são juros compostos?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Juros compostos são rendimentos calculados sobre o capital inicial e também sobre os rendimentos acumulados ao longo do tempo."
                 }
               }
             ]
