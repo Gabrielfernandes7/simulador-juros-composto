@@ -1,7 +1,7 @@
 import { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://SEU-DOMINIO.com";
+  const baseUrl = "https://simulador-juros-composto.vercel.app";
 
   const routes = [
     "",
@@ -10,6 +10,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/simulador-renda-passiva",
     "/simulador-valor-futuro",
     "/simulador-aposentadoria",
+    "/blog",
   ];
 
   return routes.map((route) => ({

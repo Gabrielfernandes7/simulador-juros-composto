@@ -1,4 +1,4 @@
-import { Simulator } from "@/components/Simulator/Simulator"
+import { Simulator } from "@/components/Simulator"
 
 export const metadata = {
   title: "Simulador de Aporte Mensal | Calcule seus Investimentos com Juros Compostos",
@@ -32,7 +32,11 @@ export default function Page() {
           Simule seus aportes mensais
         </h2>
 
-        <Simulator />
+        <Simulator
+            showInitialAmount={false}
+            showInflation={false}
+            initialValues={{ initialAmount: 0 }}
+        />
 
       </section>
 
