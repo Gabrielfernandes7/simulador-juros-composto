@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -13,53 +14,32 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://SEU-DOMINIO.com"),
+  metadataBase: new URL("https://simulador-juros-composto.vercel.app"),
   title: {
     default: "Simulador de Juros Compostos Online com Aporte Mensal",
     template: "%s | Simulador de Juros Compostos"
   },
   description:
     "Calcule juros compostos com aporte mensal, visualize o crescimento do seu investimento ao longo do tempo e entenda o impacto da inflação.",
-  openGraph: {
-    title: "Simulador de Juros Compostos Online",
-    description:
-      "Simule investimentos com capital inicial, aportes mensais e ajuste pela inflação.",
-    type: "website",
-    locale: "pt_BR",
-    url: "https://SEU-DOMINIO.com",
-    siteName: "Simulador de Juros Compostos"
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Simulador de Juros Compostos",
-    description:
-      "Ferramenta online gratuita para simular juros compostos com aporte mensal."
-  },
-  keywords: [
-    "simulador juros compostos",
-    "calculadora juros compostos",
-    "juros compostos com aporte mensal",
-    "simulador investimento",
-    "fórmula juros compostos"
-  ],
-  robots: {
-    index: true,
-    follow: true
-  }
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="pt-BR">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+    <><meta name="google-adsense-account" content="ca-pub-7761165566694488"></meta><html lang="pt-BR">
+
+      <head>
+        <Script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7761165566694488"
+          crossOrigin="anonymous"></Script>
+      </head>
+
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         {children}
       </body>
-    </html>
+
+    </html></>
   );
 }
