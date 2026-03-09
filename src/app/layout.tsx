@@ -19,8 +19,7 @@ export const metadata: Metadata = {
     default: "Simulador de Juros Compostos Online com Aporte Mensal",
     template: "%s | Simulador de Juros Compostos"
   },
-  description:
-    "Calcule juros compostos com aporte mensal, visualize o crescimento do seu investimento ao longo do tempo e entenda o impacto da inflação.",
+  description: "Calcule juros compostos com aporte mensal e entenda o impacto da inflação.",
 };
 
 export default function RootLayout({
@@ -29,17 +28,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <><meta name="google-adsense-account" content="ca-pub-7761165566694488"></meta><html lang="pt-BR">
-
+    <html lang="pt-BR">
       <head>
-        <Script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7761165566694488"
-          crossOrigin="anonymous"></Script>
+        {/* Verificação de conta do AdSense */}
+        <meta name="google-adsense-account" content="ca-pub-7761165566694488" />
+        {/* Script do AdSense com estratégia de carregamento otimizada */}
+        <Script 
+          async 
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7761165566694488"
+          crossOrigin="anonymous"
+          strategy="afterInteractive" 
+        />
       </head>
-
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         {children}
       </body>
-
-    </html></>
+    </html>
   );
 }
