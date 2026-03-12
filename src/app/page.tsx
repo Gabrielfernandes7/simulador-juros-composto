@@ -1,10 +1,15 @@
 import Navbar from "@/components/Navbar"
 import { Simulator } from "@/components/Simulator"
 
+import AdsenseAd from "@/components/ads/AdsenseAd"
+
+
 export default function Home() {
   return (
     <main className="min-h-screen bg-[#F8FAF9] text-[#0F172A]">
       <Navbar />
+
+      <AdsenseAd />
 
       {/* HERO */}
       <section className="max-w-4xl mx-auto px-6 pt-20 pb-12 text-center">

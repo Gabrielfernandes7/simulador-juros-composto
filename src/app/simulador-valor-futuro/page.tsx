@@ -1,6 +1,5 @@
 import Navbar from "@/components/Navbar"
 import { Simulator } from "@/components/Simulator"
-import Link from "next/link"
 
 export const metadata = {
   title: "Simulador de Valor Futuro | Calculadora de Investimentos",
