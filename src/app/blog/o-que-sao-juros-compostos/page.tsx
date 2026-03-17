@@ -1,5 +1,6 @@
 import Link from "next/link"
 import type { Metadata } from "next"
+import AdsenseAd from "@/components/ads/AdsenseAd"
 
 export const metadata: Metadata = {
   title: "O que são Juros Compostos e Como Funcionam",
@@ -10,6 +11,8 @@ export const metadata: Metadata = {
 export default function ArticlePage() {
   return (
     <main className="min-h-screen bg-[#F8FAF9] text-[#0F172A]">
+
+      <AdsenseAd />
 
       <article className="max-w-3xl mx-auto px-6 pt-20 pb-24">
 

@@ -34,21 +34,14 @@ export default function RootLayout({
         {/* Verificação de conta do AdSense */}
         <meta name="google-adsense-account" content="ca-pub-7761165566694488" />
         {/* Script do AdSense com estratégia de carregamento otimizada */}
-        <Script 
-          async 
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7761165566694488"
-          crossOrigin="anonymous"
-          strategy="afterInteractive" 
-        />
-      </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-
         <Script
-          async
+          async 
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7761165566694488"
           crossOrigin="anonymous"
           strategy="afterInteractive"
         />
+      </head>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         {children}
       </body>
     </html>

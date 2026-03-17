@@ -1,5 +1,6 @@
 import Link from "next/link"
 import type { Metadata } from "next"
+import AdsenseAd from "@/components/ads/AdsenseAd"
 
 export const metadata: Metadata = {
   title: "Blog sobre Juros Compostos e Investimentos",
@@ -10,6 +11,7 @@ export const metadata: Metadata = {
 export default function BlogPage() {
   return (
     <main className="min-h-screen bg-[#F8FAF9] text-[#0F172A]">
+      <AdsenseAd />
       <section className="max-w-4xl mx-auto px-6 pt-20 pb-16">
         <h1 className="text-4xl font-bold mb-6">
           Blog sobre Juros Compostos e Investimentos
