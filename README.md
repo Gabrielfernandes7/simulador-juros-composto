@@ -156,3 +156,25 @@ Próxima etapa:
 # Licença
 
 Este projeto é distribuído sob a licença MIT.
+
+---
+
+# Monetização com Google AdSense
+
+## Checklist para anúncios aparecerem
+
+1. O domínio de produção precisa estar aprovado no painel do AdSense.
+2. O arquivo `ads.txt` deve estar publicado em `https://seu-dominio.com/ads.txt`.
+3. O site precisa ter páginas com conteúdo suficiente e política de privacidade.
+4. O navegador de teste não pode estar com bloqueador de anúncios ativado.
+5. Sites novos podem levar alguns dias para começar a receber fill de anúncios.
+
+## Modo de teste (sem depender de fill real)
+
+Você pode forçar modo de teste localmente com:
+
+```bash
+NEXT_PUBLIC_ADSENSE_TEST_MODE=true npm run dev
+```
+
+Isso envia `data-adtest="on"` para o slot e ajuda a validar integração técnica.
