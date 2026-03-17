@@ -12,7 +12,7 @@ declare global {
 const ADSENSE_TEST_MODE = process.env.NEXT_PUBLIC_ADSENSE_TEST_MODE === "true"
 
 export default function AdsenseAd() {
-  const adRef = useRef<HTMLElement | null>(null)
+  const adRef = useRef<HTMLModElement | null>(null)
   const pathname = usePathname()
 
   useEffect(() => {
