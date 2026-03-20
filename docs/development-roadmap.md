@@ -16,36 +16,47 @@ A estratégia segue quatro princípios:
 
 ## 1. Padronizar o retorno da simulação
 
-Criar o contrato principal da aplicação.
+Status atual: **concluído**.
+
+O contrato principal da aplicação agora usa nomes em inglês no core e na tipagem global.
 
 ```ts
 SimulationResult
 ```
 
-Campos obrigatórios:
+Campos obrigatórios atualmente usados:
 
-* valorFinal
-* totalInvestido
-* totalJuros
-* crescimentoPercentual
-* historicoMensal[]
-* valorFinalReal (quando inflação ativa)
+* `finalAmount`
+* `totalInvested`
+* `totalInterest`
+* `growthPercent`
+* `monthlyRate`
+* `history[]`
 
-Esse tipo será o **contrato central entre o core financeiro e a interface**.
+Cada item de `history` segue o contrato `SimulationMonth`:
 
+* `month`
+* `totalInvested`
+* `balance`
+* `totalInterest`
+* `growthPercent`
+
+Esse tipo é o **contrato central entre o core financeiro e a interface**.
 
 ## 2. Consolidar cálculo de crescimento percentual
 
-Implementar definitivamente no core matemático.
+Status atual: **concluído**.
+
+O crescimento percentual passou a ser calculado definitivamente no core matemático.
 
 Fórmula:
 
 ```
-crescimentoPercentual =
-(valorFinal - totalInvestido) / totalInvestido
+growthPercent =
+((finalAmount - totalInvested) / totalInvested) * 100
 ```
 
-Este cálculo deve estar **isolado da UI**.
+O mesmo princípio também é aplicado em cada item do histórico mensal.
 
 ## 3. Implementar módulo de imposto
 
@@ -55,10 +66,10 @@ Arquivo sugerido:
 lib/tax.ts
 ```
 
-Fluxo de execução:
+Fluxo de execução planejado:
 
 ```
-simulateCompound()
+simulateCompoundInterest()
       ↓
 resultado bruto
       ↓
@@ -86,16 +97,16 @@ simulateComparison(params)
 Implementação:
 
 ```
-simulateCompound() → cenário A
-simulateCompound() → cenário B
+simulateCompoundInterest() → cenário A
+simulateCompoundInterest() → cenário B
 ```
 
 Retorno esperado:
 
 ```ts
 {
-  semAporte: SimulationResult
-  comAporte: SimulationResult
+  withoutContribution: SimulationResult
+  withContribution: SimulationResult
 }
 ```
 
@@ -114,9 +125,9 @@ Calcular **aporte necessário para atingir um objetivo financeiro**.
 Possível fluxo:
 
 ```
-calcularAporteNecessario()
+calculateRequiredContribution()
         ↓
-rodar simulateCompound()
+rodar simulateCompoundInterest()
         ↓
 validar resultado
 ```
@@ -134,10 +145,12 @@ Arquivo sugerido:
 hooks/useSimulation.ts
 ```
 
+Status atual: **concluído em versão base**.
+
 Responsabilidades:
 
 * gerenciar estado da simulação
-* controlar toggles (inflação / imposto)
+* controlar toggles de inflação
 * expor resultado consolidado
 * evitar re-renderizações desnecessárias
 
@@ -145,7 +158,7 @@ A interface **não deve conter lógica matemática**.
 
 ## 7. Otimizações de performance
 
-Implementar:
+Implementar e manter:
 
 * memoização de cálculos
 * debounce em inputs
@@ -154,7 +167,7 @@ Implementar:
 Exemplo:
 
 ```
-dynamic(() => import("Recharts"))
+dynamic(() => import("./SimulationChart"))
 ```
 
 # Fase 4 — Camada Estratégica
@@ -203,13 +216,13 @@ Possíveis funcionalidades:
 
 # Ordem Consolidada
 
-* [ ] Padronizar `SimulationResult`
-* [ ] Finalizar crescimento percentual
+* [x] Padronizar `SimulationResult` e `SimulationMonth`
+* [x] Finalizar `growthPercent` no core
 * [ ] Implementar módulo de imposto
 * [ ] Implementar simulação comparativa
 * [ ] Implementar simulação de meta
-* [ ] Criar hook central `useSimulation`
-* [ ] Otimizar performance
+* [x] Criar hook central `useSimulation`
+* [x] Otimizar performance base
 * [ ] Estrutura SEO
 * [ ] Landing page
 * [ ] Blog

@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
 type Props = {
   value: number
@@ -11,7 +11,7 @@ type Props = {
 function formatBRL(value: number) {
   return new Intl.NumberFormat("pt-BR", {
     style: "currency",
-    currency: "BRL",
+    currency: "BRL"
   }).format(value)
 }
 
@@ -30,11 +30,7 @@ export function MoneyInput({ value, onChange, className }: Props) {
   const [display, setDisplay] = useState("")
   const [isFocused, setIsFocused] = useState(false)
 
-  useEffect(() => {
-    if (!isFocused) {
-      setDisplay(formatBRL(value))
-    }
-  }, [value, isFocused])
+  const displayedValue = isFocused ? display : formatBRL(value)
 
   function handleFocus() {
     setIsFocused(true)
@@ -43,7 +39,7 @@ export function MoneyInput({ value, onChange, className }: Props) {
 
   function handleBlur() {
     setIsFocused(false)
-    setDisplay(formatBRL(value))
+    setDisplay("")
   }
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -58,7 +54,7 @@ export function MoneyInput({ value, onChange, className }: Props) {
     <input
       type="text"
       inputMode="decimal"
-      value={display}
+      value={displayedValue}
       onFocus={handleFocus}
       onBlur={handleBlur}
       onChange={handleChange}
