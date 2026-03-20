@@ -27,9 +27,9 @@ export default function ContatoPage() {
           </p>
           <a
             className="mt-3 inline-block text-lg font-semibold text-green-700 hover:underline"
-            href="mailto:contato@simulador-juros-composto.vercel.app"
+            href="mailto:gabrielassuncaofernandes@gmail.com"
           >
-            contato@simulador-juros-composto.vercel.app
+            gabrielassuncaofernandes07@gmail.com
           </a>
 
           <p className="mt-6 leading-7 text-slate-600">
