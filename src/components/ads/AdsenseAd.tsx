@@ -44,7 +44,7 @@ export default function AdsenseAd() {
   }, [pathname])
 
   return (
-    <div className="mx-auto my-8 w-full max-w-5xl px-6">
+    <div className="mx-auto mt-8 w-full max-w-5xl px-6">
       <ins
         ref={adRef}
         className="adsbygoogle"

@@ -42,9 +42,13 @@ export default function RootLayout({
           strategy="afterInteractive"
         />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        {children}
-        <Footer />
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} bg-[#F8FAF9] text-[#0F172A] antialiased`}
+      >
+        <div className="flex min-h-screen flex-col">
+          <div className="flex-1">{children}</div>
+          <Footer />
+        </div>
       </body>
     </html>
   );
