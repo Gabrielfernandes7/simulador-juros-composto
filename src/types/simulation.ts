@@ -8,18 +8,18 @@ export interface SimulationInput {
 
 export interface SimulationMonth {
   month: number
-  investedAmount: number
-  totalAmount: number
-  interestAmount: number
+  totalInvested: number
+  balance: number
+  totalInterest: number
+  growthPercent: number
 }
 
 export interface SimulationResult {
   finalAmount: number
   totalInvested: number
   totalInterest: number
+  growthPercent: number
   monthlyRate: number
-  realFinalAmount?: number
-  realTotalInterest?: number
   history: SimulationMonth[]
 }
 

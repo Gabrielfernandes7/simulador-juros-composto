@@ -5,35 +5,46 @@ export function convertAnnualToMonthlyRate(annualRate: number): number {
   return Math.pow(1 + annualDecimal, 1 / 12) - 1
 }
 
+function calculateGrowthPercent(balance: number, totalInvested: number): number {
+  if (totalInvested <= 0) return 0
+
+  return ((balance - totalInvested) / totalInvested) * 100
+}
+
 export function simulateCompoundInterest(input: SimulationInput): SimulationResult {
-
   const { initialAmount, annualRate, monthlyContribution, years } = input
-
 
   const totalMonths = years * 12
   const monthlyRate = convertAnnualToMonthlyRate(annualRate)
 
-  let totalAmount = initialAmount
+  let balance = initialAmount
   let totalInvested = initialAmount
   const history: SimulationMonth[] = []
 
   for (let month = 1; month <= totalMonths; month++) {
-    const interest = totalAmount * monthlyRate
-    totalAmount = totalAmount + interest + monthlyContribution
+    const interest = balance * monthlyRate
+    balance = balance + interest + monthlyContribution
     totalInvested += monthlyContribution
+
+    const totalInterest = balance - totalInvested
+    const growthPercent = calculateGrowthPercent(balance, totalInvested)
 
     history.push({
       month,
-      investedAmount: totalInvested,
-      totalAmount,
-      interestAmount: totalAmount - totalInvested
+      totalInvested,
+      balance,
+      totalInterest,
+      growthPercent
     })
   }
 
+  const totalInterest = balance - totalInvested
+
   return {
-    finalAmount: totalAmount,
+    finalAmount: balance,
     totalInvested,
-    totalInterest: totalAmount - totalInvested,
+    totalInterest,
+    growthPercent: calculateGrowthPercent(balance, totalInvested),
     monthlyRate,
     history
   }

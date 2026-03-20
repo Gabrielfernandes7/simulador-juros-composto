@@ -89,7 +89,7 @@ Responsabilidades do motor:
 * calcular juros compostos
 * gerar histórico mês a mês
 * calcular crescimento percentual
-* considerar inflação (taxa real)
+* retornar um contrato único para o core e a UI
 
 ## Conversão de Taxa
 
@@ -105,7 +105,7 @@ monthlyRate = (1 + annualRate)^(1/12) - 1
 
 # Estrutura de Resultado da Simulação
 
-Todas as simulações retornam um objeto padronizado.
+Todas as simulações retornam um objeto padronizado em inglês, enquanto as páginas podem documentar ou exibir equivalentes em PT-BR.
 
 Tipo principal:
 
@@ -113,16 +113,26 @@ Tipo principal:
 SimulationResult
 ```
 
-Campos esperados:
+Campos finais usados no código:
 
-| Campo                 | Descrição                    |
-| --------------------- | ---------------------------- |
-| valorFinal            | patrimônio final             |
-| totalInvestido        | soma de todos os aportes     |
-| totalJuros            | rendimento obtido            |
-| crescimentoPercentual | crescimento relativo         |
-| historicoMensal       | evolução mês a mês           |
-| valorFinalReal        | valor ajustado pela inflação |
+| Campo em código | Equivalente PT-BR         | Descrição                                 |
+| --------------- | ------------------------- | ----------------------------------------- |
+| `finalAmount`   | valor final               | patrimônio acumulado ao final             |
+| `totalInvested` | total investido           | soma do capital inicial com os aportes    |
+| `totalInterest` | total em juros            | rendimento acumulado                      |
+| `growthPercent` | crescimento percentual    | crescimento relativo sobre o investido    |
+| `monthlyRate`   | taxa mensal equivalente   | taxa efetiva mensal derivada da taxa anual |
+| `history`       | histórico mensal          | coleção de `SimulationMonth`              |
+
+Estrutura de cada item de histórico:
+
+| Campo em código | Equivalente PT-BR      | Descrição                               |
+| --------------- | ---------------------- | --------------------------------------- |
+| `month`         | mês                    | índice mensal da simulação              |
+| `totalInvested` | total investido        | acumulado investido até o mês           |
+| `balance`       | saldo total            | patrimônio acumulado no mês             |
+| `totalInterest` | juros acumulados       | diferença entre saldo e valor investido |
+| `growthPercent` | crescimento percentual | evolução percentual acumulada           |
 
 # Interface da Aplicação
 
@@ -133,14 +143,15 @@ Características da UI:
 * layout responsivo
 * componentes reutilizáveis
 * visualização gráfica da simulação
+* documentação textual em PT-BR quando necessário
 
 Componentes principais:
 
-| Componente      | Função                              |
-| --------------- | ----------------------------------- |
-| ResultCards     | exibição dos resultados principais  |
-| InvestmentChart | gráfico de evolução do investimento |
-| SimulationForm  | entrada de dados da simulação       |
+| Componente          | Função                              |
+| ------------------- | ----------------------------------- |
+| `ResultCard`        | exibição dos resultados principais  |
+| `SimulationChart`   | gráfico de evolução do investimento |
+| `Simulator`         | entrada de dados e composição da UI |
 
 # Visualização de Dados
 
@@ -164,7 +175,7 @@ Objetivo:
 # Testes (Planejado)
 
 > [!WARNING]
-> Testes ainda não foram implementados.
+> Testes automatizados do core ainda não foram implementados.
 
 Plano de testes:
 

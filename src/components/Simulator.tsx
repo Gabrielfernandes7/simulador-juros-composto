@@ -37,7 +37,6 @@ export function Simulator({
     setInflationRate,
     useInflation,
     setUseInflation,
-    totalGrowthPercent,
     errors,
     isValid
   } = useSimulation(initialValues)
@@ -203,7 +202,7 @@ export function Simulator({
         <ResultCard
           label="Valor Final"
           value={currency(result.finalAmount)}
-          extra={<GrowthBadge value={totalGrowthPercent} />}
+          extra={<GrowthBadge value={result.growthPercent} />}
         />
 
         <ResultCard

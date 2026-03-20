@@ -50,7 +50,7 @@ export function SimulationChart({ data }: SimulationChartProps) {
 
           <Line
             type="monotone"
-            dataKey="totalAmount"
+            dataKey="balance"
             stroke="#14532D"
             strokeWidth={3}
             dot={false}
@@ -58,7 +58,7 @@ export function SimulationChart({ data }: SimulationChartProps) {
 
           <Line
             type="monotone"
-            dataKey="investedAmount"
+            dataKey="totalInvested"
             stroke="#94A3B8"
             strokeWidth={2}
             dot={false}

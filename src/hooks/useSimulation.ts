@@ -18,6 +18,7 @@ const emptyResult: SimulationResult = {
   finalAmount: 0,
   totalInvested: 0,
   totalInterest: 0,
+  growthPercent: 0,
   monthlyRate: 0,
   history: []
 }
@@ -55,10 +56,6 @@ export function useSimulation(initialValues?: Partial<SimulationInput>) {
     })
   }, [debouncedInput, debouncedInflation, useInflation, isValid])
 
-  const totalGrowthPercent = useMemo(() => {
-    if (!isValid || result.totalInvested === 0) return 0
-    return ((result.finalAmount / result.totalInvested) - 1) * 100
-  }, [result, isValid])
 
   function updateField<K extends keyof SimulationInput>(
     field: K,
@@ -73,7 +70,6 @@ export function useSimulation(initialValues?: Partial<SimulationInput>) {
   return {
     input,
     result,
-    totalGrowthPercent,
     errors,
     isValid,
     updateField,
