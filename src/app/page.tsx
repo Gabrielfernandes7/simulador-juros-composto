@@ -9,8 +9,6 @@ export default function Home() {
     <main className="min-h-screen bg-[#F8FAF9] text-[#0F172A]">
       <Navbar />
 
-      <AdsenseAd />
-
       {/* HERO */}
       <section className="max-w-4xl mx-auto px-6 pt-20 pb-12 text-center">
         <h1 className="text-4xl md:text-5xl font-bold tracking-tight leading-tight">
@@ -117,6 +115,8 @@ export default function Home() {
 
         </div>
       </section>
+
+      <AdsenseAd />
 
       {/* FAQ SCHEMA */}
       <script
