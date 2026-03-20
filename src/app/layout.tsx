@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
+import Footer from "@/components/Footer";
 
 import "./globals.css";
 
@@ -41,8 +42,13 @@ export default function RootLayout({
           strategy="afterInteractive"
         />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        {children}
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} bg-[#F8FAF9] text-[#0F172A] antialiased`}
+      >
+        <div className="flex min-h-screen flex-col">
+          <div className="flex-1">{children}</div>
+          <Footer />
+        </div>
       </body>
     </html>
   );

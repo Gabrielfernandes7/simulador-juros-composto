@@ -9,8 +9,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/simulador-aporte-mensal",
     "/simulador-renda-passiva",
     "/simulador-valor-futuro",
-    "/simulador-aposentadoria",
     "/blog",
+    "/blog/o-que-sao-juros-compostos",
+    "/blog/juros-simples-vs-compostos",
+    "/sobre",
+    "/privacidade",
+    "/termos",
+    "/contato",
   ];
 
   return routes.map((route) => ({

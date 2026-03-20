@@ -14,8 +14,6 @@ export default function Page() {
 
       <Navbar />
 
-      <AdsenseAd />
-
       <section className="max-w-4xl mx-auto px-6 pt-20 pb-12 text-center">
 
         <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
@@ -59,6 +57,8 @@ export default function Page() {
         </p>
 
       </section>
+
+      <AdsenseAd />
 
     </main>
   )

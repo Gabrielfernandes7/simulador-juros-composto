@@ -26,8 +26,6 @@ export default function Page() {
 
       <Navbar />
 
-      <AdsenseAd />
-
       {/* HERO */}
       <section className="max-w-4xl mx-auto px-6 pt-20 pb-12 text-center">
 
@@ -112,13 +110,13 @@ export default function Page() {
           </li>
 
           <li>
-            <Link href="/simulador-inflacao-investimentos" className="hover:underline">
-              Simulador de Investimentos com Inflação
+            <Link href="/simulador-valor-futuro" className="hover:underline">
+              Simulador de Valor Futuro
             </Link>
           </li>
 
           <li>
-            <Link href="/calculadora-renda-passiva" className="hover:underline">
+            <Link href="/simulador-renda-passiva" className="hover:underline">
               Calculadora de Renda Passiva
             </Link>
           </li>
@@ -175,6 +173,8 @@ export default function Page() {
         </div>
 
       </section>
+
+      <AdsenseAd />
 
       {/* SCHEMA WEB APPLICATION */}
       <script

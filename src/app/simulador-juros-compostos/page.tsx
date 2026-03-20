@@ -15,8 +15,6 @@ export default function Page() {
 
       <Navbar />
 
-      <AdsenseAd />
-
       {/* HERO */}
       <section className="max-w-4xl mx-auto px-6 pt-20 pb-12 text-center">
 
@@ -111,6 +109,8 @@ export default function Page() {
         </ul>
 
       </section>
+
+      <AdsenseAd />
 
     </main>
   )

@@ -11,7 +11,6 @@ export const metadata: Metadata = {
 export default function BlogPage() {
   return (
     <main className="min-h-screen bg-[#F8FAF9] text-[#0F172A]">
-      <AdsenseAd />
       <section className="max-w-4xl mx-auto px-6 pt-20 pb-16">
         <h1 className="text-4xl font-bold mb-6">
           Blog sobre Juros Compostos e Investimentos
@@ -30,8 +29,8 @@ export default function BlogPage() {
             </h2>
 
             <p className="text-slate-600 mb-4">
-              Entenda o conceito de juros compostos, como funciona o crescimento exponencial
-              e por que ele é fundamental para investimentos de longo prazo.
+              Entenda o conceito de juros compostos, como funciona o crescimento
+              exponencial e por que ele é fundamental para investimentos de longo prazo.
             </p>
 
             <Link
@@ -48,12 +47,12 @@ export default function BlogPage() {
             </h2>
 
             <p className="text-slate-600 mb-4">
-              Entenda o conceito de juros compostos, como funciona o crescimento exponencial
-              e por que ele é fundamental para investimentos de longo prazo.
+              Compare os dois regimes de capitalização, entenda o impacto no
+              longo prazo e veja por que o efeito acumulativo muda o resultado final.
             </p>
 
             <Link
-              href="/blog/o-que-sao-juros-compostos"
+              href="/blog/juros-simples-vs-compostos"
               className="text-blue-600 font-medium"
             >
               Ler artigo completo →
@@ -62,6 +61,7 @@ export default function BlogPage() {
 
         </div>
       </section>
+      <AdsenseAd />
     </main>
   )
 }

@@ -11,9 +11,6 @@ export const metadata: Metadata = {
 export default function ArticlePage() {
   return (
     <main className="min-h-screen bg-[#F8FAF9] text-[#0F172A]">
-
-      <AdsenseAd />
-
       <article className="max-w-3xl mx-auto px-6 pt-20 pb-24">
 
         <h1 className="text-4xl font-bold mb-8">
@@ -72,6 +69,8 @@ export default function ArticlePage() {
         </div>
 
       </article>
+
+      <AdsenseAd />
 
     </main>
   )
