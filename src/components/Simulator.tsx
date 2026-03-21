@@ -64,6 +64,7 @@ export function Simulator({
     setPassiveIncomeRate,
     passiveIncomeProjection,
     calculatorMetrics,
+    taxes,
     errors,
     isValid
   } = useSimulation({ initialValues, calculatorType })
@@ -243,6 +244,36 @@ export function Simulator({
             </div>
           )}
 
+          <div className="rounded-xl border border-amber-200 bg-amber-50 p-4">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="text-sm font-medium text-slate-800">
+                  Tributação simplificada (em breve)
+                </p>
+                <p className="mt-1 text-sm text-slate-600 leading-relaxed">
+                  Estrutura preparada para um resultado líquido educacional com IR simplificado sobre rendimento.
+                  Por enquanto, a interface mantém essa opção desativada até a evolução das regras por produto e come-cotas.
+                </p>
+              </div>
+
+              <label className="relative inline-flex items-center cursor-not-allowed opacity-60">
+                <input
+                  type="checkbox"
+                  className="sr-only peer"
+                  checked={false}
+                  disabled
+                  aria-label="Ativar tributação simplificada em breve"
+                />
+
+                <div className="w-11 h-6 bg-slate-200 rounded-full peer
+                  after:content-[''] after:absolute after:top-[2px]
+                  after:left-[2px] after:bg-white after:border
+                  after:border-slate-300 after:rounded-full
+                  after:h-5 after:w-5 after:transition-all" />
+              </label>
+            </div>
+          </div>
+
           {showInflation && (
             <div className="mt-8 border-t pt-6">
               <div className="flex items-center justify-between">
@@ -302,6 +333,18 @@ export function Simulator({
             description={metric.description}
           />
         ))}
+
+        {taxes && (
+          <div className="rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm text-slate-700">
+            <p className="font-medium text-slate-800">Resultado líquido educacional simplificado</p>
+            <p className="mt-2 leading-relaxed">
+              {taxes.educationalDisclaimer}
+            </p>
+            <p className="mt-3">
+              IR estimado sobre rendimento: <strong>{formatMetricValue(taxes.incomeTaxAmount, "currency")}</strong>
+            </p>
+          </div>
+        )}
 
         {isValid && result.history.length > 0 && (
           <div className="lg:col-span-2 mt-8">

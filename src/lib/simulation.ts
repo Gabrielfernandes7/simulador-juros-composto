@@ -1,4 +1,5 @@
 import { simulateCompoundInterest } from "@/lib/compound"
+import { applySimplifiedTaxToSimulation } from "@/lib/tax"
 import {
   CalculatorMetric,
   CalculatorType,
@@ -7,7 +8,8 @@ import {
   SimulationInput,
   SimulationOptions,
   SimulationResult,
-  SimulationScenario
+  SimulationScenario,
+  TaxSimulationOptions
 } from "@/types/simulation"
 import { calculateRealRate } from "@/lib/inflation"
 
@@ -42,16 +44,22 @@ export function buildSimulationScenario(
 }
 
 export function buildSimulationResult(
-  scenario: SimulationScenario
+  scenario: SimulationScenario,
+  taxOptions?: TaxSimulationOptions
 ): SimulationComposedResult {
-  const result = simulateCompoundInterest({
+  const grossResult = simulateCompoundInterest({
     ...scenario.input,
     annualRate: scenario.effectiveAnnualRate
   })
 
+  const taxedResult = applySimplifiedTaxToSimulation(grossResult, taxOptions)
+
   return {
     scenario,
-    result
+    grossResult,
+    result: taxedResult.netResult,
+    taxes: taxedResult.taxes,
+    taxOptions: taxedResult.taxOptions
   }
 }
 
