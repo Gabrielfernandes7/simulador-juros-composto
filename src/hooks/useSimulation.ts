@@ -1,26 +1,20 @@
 "use client"
 
 import { useMemo, useState } from "react"
-import { simulateCompoundInterest } from "@/lib/compound"
-import { calculateRealRate } from "@/lib/inflation"
-import { SimulationInput, SimulationResult } from "@/types/simulation"
+import { SimulationInput } from "@/types/simulation"
 import { useDebouncedValue } from "@/hooks/useDebouncedValue"
 import { validateSimulation } from "@/lib/validation"
+import {
+  buildSimulationResult,
+  buildSimulationScenario,
+  emptySimulationResult
+} from "@/lib/simulation"
 
 const defaultInput: SimulationInput = {
   initialAmount: 1000.0,
   annualRate: 12.0,
   monthlyContribution: 500.0,
   years: 5
-}
-
-const emptyResult: SimulationResult = {
-  finalAmount: 0,
-  totalInvested: 0,
-  totalInterest: 0,
-  growthPercent: 0,
-  monthlyRate: 0,
-  history: []
 }
 
 export function useSimulation(initialValues?: Partial<SimulationInput>) {
@@ -33,29 +27,26 @@ export function useSimulation(initialValues?: Partial<SimulationInput>) {
   const [useInflation, setUseInflation] = useState(false)
 
   const debouncedInput = useDebouncedValue(input, 300)
-  const debouncedInflation = useDebouncedValue(inflationRate, 300)
+  const debouncedInflationRate = useDebouncedValue(inflationRate, 300)
 
-  // 1️⃣ Validação sempre roda com valores atuais (não debounced)
   const errors = useMemo(() => {
     return validateSimulation(input, inflationRate, useInflation)
   }, [input, inflationRate, useInflation])
 
   const isValid = Object.keys(errors).length === 0
 
-  // 2️⃣ Cálculo só roda se for válido
-  const result: SimulationResult = useMemo(() => {
-    if (!isValid) return emptyResult
-
-    const adjustedRate = useInflation
-      ? calculateRealRate(debouncedInput.annualRate, debouncedInflation)
-      : debouncedInput.annualRate
-
-    return simulateCompoundInterest({
-      ...debouncedInput,
-      annualRate: adjustedRate
+  const scenario = useMemo(() => {
+    return buildSimulationScenario(debouncedInput, {
+      inflationRate: debouncedInflationRate,
+      useInflation
     })
-  }, [debouncedInput, debouncedInflation, useInflation, isValid])
+  }, [debouncedInput, debouncedInflationRate, useInflation])
 
+  const result = useMemo(() => {
+    if (!isValid) return emptySimulationResult
+
+    return buildSimulationResult(scenario).result
+  }, [isValid, scenario])
 
   function updateField<K extends keyof SimulationInput>(
     field: K,

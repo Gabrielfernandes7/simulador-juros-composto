@@ -27,3 +27,15 @@ export interface SimulationOptions {
   inflationRate?: number
   useInflation?: boolean
 }
+
+export interface SimulationScenario {
+  input: SimulationInput
+  inflationRate: number
+  useInflation: boolean
+  effectiveAnnualRate: number
+}
+
+export interface SimulationComposedResult {
+  scenario: SimulationScenario
+  result: SimulationResult
+}
