@@ -1,18 +1,22 @@
 "use client"
 
 import dynamic from "next/dynamic"
+import { useEffect, useRef } from "react"
+import { usePathname } from "next/navigation"
 import { useSimulation } from "@/hooks/useSimulation"
 import { ResultCard } from "./ResultCard"
 import { MoneyInput } from "./MoneyInput"
 import { PercentInput } from "./PercentInput"
 import { GrowthBadge } from "./GrowthBadge"
 import { SimulationInput } from "@/types/simulation"
+import { analyticsEvents, trackEvent } from "@/lib/analytics"
 
 type SimulatorProps = {
   showInitialAmount?: boolean
   showMonthlyContribution?: boolean
   showInflation?: boolean
   initialValues?: Partial<SimulationInput>
+  calculatorType?: string
 }
 
 function currency(value: number) {
@@ -26,8 +30,13 @@ export function Simulator({
   showInitialAmount = true,
   showMonthlyContribution = true,
   showInflation = true,
-  initialValues
+  initialValues,
+  calculatorType = "compound_interest"
 }: SimulatorProps) {
+  const pathname = usePathname()
+  const hasTrackedStartRef = useRef(false)
+  const hasTrackedCompletionRef = useRef(false)
+  const previousInflationRef = useRef(false)
 
   const {
     input,
@@ -46,6 +55,35 @@ export function Simulator({
     { ssr: false }
   )
 
+  useEffect(() => {
+    if (!previousInflationRef.current && useInflation) {
+      trackEvent(analyticsEvents.inflationEnabled, {
+        calculator_type: calculatorType,
+        path: pathname,
+        inflation_rate: inflationRate
+      })
+    }
+
+    previousInflationRef.current = useInflation
+  }, [calculatorType, inflationRate, pathname, useInflation])
+
+  useEffect(() => {
+    if (!hasTrackedCompletionRef.current && hasTrackedStartRef.current && isValid) {
+      hasTrackedCompletionRef.current = true
+      trackEvent(analyticsEvents.simulationCompleted, {
+        calculator_type: calculatorType,
+        path: pathname,
+        years: input.years,
+        annual_rate: input.annualRate,
+        uses_inflation: useInflation
+      })
+    }
+
+    if (!isValid) {
+      hasTrackedCompletionRef.current = false
+    }
+  }, [calculatorType, input.annualRate, input.years, isValid, pathname, useInflation])
+
   const inputStyle = (error?: string) =>
     `w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 ${
       error
@@ -53,26 +91,52 @@ export function Simulator({
         : "border-slate-300 focus:ring-[#16A34A]"
     }`
 
+  function trackSimulationStart(field: string) {
+    if (hasTrackedStartRef.current) {
+      return
+    }
+
+    hasTrackedStartRef.current = true
+    trackEvent(analyticsEvents.simulationStarted, {
+      calculator_type: calculatorType,
+      path: pathname,
+      trigger_field: field
+    })
+  }
+
+  function handleFieldUpdate<K extends keyof SimulationInput>(
+    field: K,
+    value: SimulationInput[K]
+  ) {
+    trackSimulationStart(field)
+    updateField(field, value)
+  }
+
+  function handleInflationToggle(checked: boolean) {
+    trackSimulationStart("inflation_toggle")
+    setUseInflation(checked)
+  }
+
+  function handleInflationRateChange(value: number) {
+    trackSimulationStart("inflation_rate")
+    setInflationRate(value)
+  }
+
   return (
     <div className="grid lg:grid-cols-2 gap-12">
-
-      {/* INPUTS */}
       <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
-
         <h2 className="text-2xl font-semibold mb-8 text-slate-800">
           Simulação de Investimento
         </h2>
 
         <div className="space-y-6">
-
-          {/* CAPITAL INICIAL */}
           {showInitialAmount && (
             <div>
               <label className="block text-sm mb-2">Capital Inicial</label>
 
               <MoneyInput
                 value={input.initialAmount}
-                onChange={(value) => updateField("initialAmount", value)}
+                onChange={(value) => handleFieldUpdate("initialAmount", value)}
                 className={inputStyle(errors.initialAmount)}
               />
 
@@ -84,13 +148,12 @@ export function Simulator({
             </div>
           )}
 
-          {/* TAXA ANUAL */}
           <div>
             <label className="block text-sm mb-2">Taxa Anual (%)</label>
 
             <PercentInput
               value={input.annualRate}
-              onChange={(value) => updateField("annualRate", value)}
+              onChange={(value) => handleFieldUpdate("annualRate", value)}
               className={inputStyle(errors.annualRate)}
             />
 
@@ -101,14 +164,13 @@ export function Simulator({
             )}
           </div>
 
-          {/* APORTE MENSAL */}
           {showMonthlyContribution && (
             <div>
               <label className="block text-sm mb-2">Aporte Mensal</label>
 
               <MoneyInput
                 value={input.monthlyContribution}
-                onChange={(value) => updateField("monthlyContribution", value)}
+                onChange={(value) => handleFieldUpdate("monthlyContribution", value)}
                 className={inputStyle(errors.monthlyContribution)}
               />
 
@@ -120,7 +182,6 @@ export function Simulator({
             </div>
           )}
 
-          {/* TEMPO */}
           <div>
             <label className="block text-sm mb-2">Tempo (anos)</label>
 
@@ -128,7 +189,7 @@ export function Simulator({
               type="number"
               value={input.years}
               onChange={e =>
-                updateField("years", Number(e.target.value))
+                handleFieldUpdate("years", Number(e.target.value))
               }
               className={inputStyle(errors.years)}
             />
@@ -140,22 +201,19 @@ export function Simulator({
             )}
           </div>
 
-          {/* INFLAÇÃO */}
           {showInflation && (
             <div className="mt-8 border-t pt-6">
-
               <div className="flex items-center justify-between">
                 <span className="font-medium text-slate-700">
                   Ajustar pela inflação
                 </span>
 
                 <label className="relative inline-flex items-center cursor-pointer">
-
                   <input
                     type="checkbox"
                     className="sr-only peer"
                     checked={useInflation}
-                    onChange={(e) => setUseInflation(e.target.checked)}
+                    onChange={(e) => handleInflationToggle(e.target.checked)}
                   />
 
                   <div className="w-11 h-6 bg-slate-200 rounded-full peer
@@ -165,20 +223,18 @@ export function Simulator({
                     after:border-slate-300 after:rounded-full
                     after:h-5 after:w-5 after:transition-all
                     peer-checked:bg-[#16A34A]" />
-
                 </label>
               </div>
 
               {useInflation && (
                 <div className="mt-4">
-
                   <label className="block text-sm mb-2 text-slate-600">
                     Inflação anual (%)
                   </label>
 
                   <PercentInput
                     value={inflationRate}
-                    onChange={(value) => setInflationRate(value)}
+                    onChange={(value) => handleInflationRateChange(value)}
                     className={inputStyle(errors.inflationRate)}
                   />
 
@@ -187,18 +243,14 @@ export function Simulator({
                       {errors.inflationRate}
                     </p>
                   )}
-
                 </div>
               )}
             </div>
           )}
-
         </div>
       </div>
 
-      {/* RESULTADOS */}
       <div className="grid gap-6">
-
         <ResultCard
           label="Valor Final"
           value={currency(result.finalAmount)}
@@ -225,9 +277,7 @@ export function Simulator({
             <SimulationChart data={result.history} />
           </div>
         )}
-
       </div>
-
     </div>
   )
 }
