@@ -104,7 +104,7 @@ export default function Home() {
           </TrackedLink>
         </div>
 
-        <Simulator calculatorType="hub_overview" />
+        <Simulator calculatorType="compound_interest" />
       </section>
 
       <section className="max-w-4xl mx-auto px-6 py-20">
