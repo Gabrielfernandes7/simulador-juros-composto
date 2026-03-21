@@ -11,6 +11,7 @@ import {
 } from "@/types/simulation"
 import { useDebouncedValue } from "@/hooks/useDebouncedValue"
 import { validateSimulation } from "@/lib/validation"
+import { calculateRequiredMonthlyContribution } from "@/lib/goal"
 import {
   buildCalculatorMetrics,
   buildSimulationResult,
@@ -23,7 +24,8 @@ const defaultInput: SimulationInput = {
   initialAmount: 1000.0,
   annualRate: 12.0,
   monthlyContribution: 500.0,
-  years: 5
+  years: 5,
+  targetAmount: undefined
 }
 
 interface UseSimulationOptions {
@@ -91,9 +93,24 @@ export function useSimulation({
     return calculatePassiveIncomeProjection(result.finalAmount, debouncedPassiveIncomeRate)
   }, [debouncedPassiveIncomeRate, result.finalAmount])
 
+  const requiredContribution = useMemo(() => {
+    if (calculatorType !== "financial_goal" || !debouncedInput.targetAmount) {
+      return debouncedInput.monthlyContribution
+    }
+
+    return calculateRequiredMonthlyContribution({
+      initialAmount: debouncedInput.initialAmount,
+      annualRate: useInflation ? scenario.effectiveAnnualRate : debouncedInput.annualRate,
+      years: debouncedInput.years,
+      targetAmount: debouncedInput.targetAmount
+    })
+  }, [calculatorType, debouncedInput.annualRate, debouncedInput.initialAmount, debouncedInput.monthlyContribution, debouncedInput.targetAmount, debouncedInput.years, scenario.effectiveAnnualRate, useInflation])
+
   const calculatorMetrics: CalculatorMetric[] = useMemo(() => {
     const metrics = buildCalculatorMetrics(calculatorType, result, {
-      passiveIncomeRate: debouncedPassiveIncomeRate
+      passiveIncomeRate: debouncedPassiveIncomeRate,
+      monthlyContribution: requiredContribution,
+      targetAmount: debouncedInput.targetAmount
     })
 
     return metrics.map(metric => {
@@ -113,7 +130,7 @@ export function useSimulation({
 
       return metric
     })
-  }, [calculatorType, debouncedInput.initialAmount, debouncedInput.monthlyContribution, debouncedPassiveIncomeRate, result])
+  }, [calculatorType, debouncedInput.initialAmount, debouncedInput.monthlyContribution, debouncedInput.targetAmount, debouncedPassiveIncomeRate, requiredContribution, result])
 
   function updateField<K extends keyof SimulationInput>(
     field: K,

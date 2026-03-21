@@ -4,6 +4,7 @@ export interface SimulationInput {
   monthlyContribution: number
   years: number
   inflationRate?: number // opcional (% anual)
+  targetAmount?: number
 }
 
 export interface SimulationMonth {
@@ -75,6 +76,7 @@ export type CalculatorType =
   | "monthly_contribution"
   | "future_value"
   | "passive_income"
+  | "financial_goal"
 
 export interface PassiveIncomeProjection {
   annualWithdrawalRate: number

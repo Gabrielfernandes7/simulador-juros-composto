@@ -8,6 +8,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/simulador-juros-compostos",
     "/simulador-aporte-mensal",
     "/simulador-renda-passiva",
+    "/simulador-meta-financeira",
     "/simulador-valor-futuro",
     "/blog",
     "/blog/o-que-sao-juros-compostos",

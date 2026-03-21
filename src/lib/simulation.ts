@@ -1,4 +1,5 @@
 import { simulateCompoundInterest } from "@/lib/compound"
+import { calculateRequiredMonthlyContribution } from "@/lib/goal"
 import { applySimplifiedTaxToSimulation } from "@/lib/tax"
 import {
   CalculatorMetric,
@@ -47,10 +48,23 @@ export function buildSimulationResult(
   scenario: SimulationScenario,
   taxOptions?: TaxSimulationOptions
 ): SimulationComposedResult {
-  const grossResult = simulateCompoundInterest({
-    ...scenario.input,
-    annualRate: scenario.effectiveAnnualRate
-  })
+  const normalizedInput = scenario.input.targetAmount && scenario.input.targetAmount > 0
+    ? {
+        ...scenario.input,
+        annualRate: scenario.effectiveAnnualRate,
+        monthlyContribution: calculateRequiredMonthlyContribution({
+          initialAmount: scenario.input.initialAmount,
+          annualRate: scenario.effectiveAnnualRate,
+          years: scenario.input.years,
+          targetAmount: scenario.input.targetAmount
+        })
+      }
+    : {
+        ...scenario.input,
+        annualRate: scenario.effectiveAnnualRate
+      }
+
+  const grossResult = simulateCompoundInterest(normalizedInput)
 
   const taxedResult = applySimplifiedTaxToSimulation(grossResult, taxOptions)
 
@@ -84,6 +98,8 @@ export function buildCalculatorMetrics(
   result: SimulationResult,
   options?: {
     passiveIncomeRate?: number
+    monthlyContribution?: number
+    targetAmount?: number
   }
 ): CalculatorMetric[] {
   const passiveIncomeProjection = calculatePassiveIncomeProjection(
@@ -178,6 +194,36 @@ export function buildCalculatorMetrics(
           key: "totalInvested",
           label: "Capital Aportado",
           value: result.totalInvested,
+          format: "currency"
+        }
+      ]
+    case "financial_goal":
+      return [
+        {
+          key: "requiredMonthlyContribution",
+          label: "Aporte Mensal Necessário",
+          value: options?.monthlyContribution ?? 0,
+          format: "currency",
+          description: "Valor mensal estimado para buscar a meta no prazo informado.",
+          highlightGrowth: true
+        },
+        {
+          key: "targetAmount",
+          label: "Meta de Patrimônio",
+          value: options?.targetAmount ?? result.finalAmount,
+          format: "currency",
+          description: "Objetivo financeiro usado como referência para calcular o aporte."
+        },
+        {
+          key: "totalInvested",
+          label: "Capital Total Aportado",
+          value: result.totalInvested,
+          format: "currency"
+        },
+        {
+          key: "totalInterest",
+          label: "Parcela Projetada em Juros",
+          value: result.totalInterest,
           format: "currency"
         }
       ]
