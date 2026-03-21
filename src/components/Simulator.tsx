@@ -8,7 +8,7 @@ import { ResultCard } from "./ResultCard"
 import { MoneyInput } from "./MoneyInput"
 import { PercentInput } from "./PercentInput"
 import { GrowthBadge } from "./GrowthBadge"
-import { SimulationInput } from "@/types/simulation"
+import { CalculatorType, SimulationInput } from "@/types/simulation"
 import { analyticsEvents, trackEvent } from "@/lib/analytics"
 
 type SimulatorProps = {
@@ -16,7 +16,8 @@ type SimulatorProps = {
   showMonthlyContribution?: boolean
   showInflation?: boolean
   initialValues?: Partial<SimulationInput>
-  calculatorType?: string
+  calculatorType?: CalculatorType
+  formTitle?: string
 }
 
 function currency(value: number) {
@@ -26,12 +27,25 @@ function currency(value: number) {
   }).format(value)
 }
 
+function formatMetricValue(value: number, format: "currency" | "percent_2" | "percent_decimal_4") {
+  switch (format) {
+    case "percent_2":
+      return `${value.toFixed(2)}%`
+    case "percent_decimal_4":
+      return `${(value * 100).toFixed(4)}%`
+    case "currency":
+    default:
+      return currency(value)
+  }
+}
+
 export function Simulator({
   showInitialAmount = true,
   showMonthlyContribution = true,
   showInflation = true,
   initialValues,
-  calculatorType = "compound_interest"
+  calculatorType = "compound_interest",
+  formTitle = "Simulação de Investimento"
 }: SimulatorProps) {
   const pathname = usePathname()
   const hasTrackedStartRef = useRef(false)
@@ -46,9 +60,13 @@ export function Simulator({
     setInflationRate,
     useInflation,
     setUseInflation,
+    passiveIncomeRate,
+    setPassiveIncomeRate,
+    passiveIncomeProjection,
+    calculatorMetrics,
     errors,
     isValid
-  } = useSimulation(initialValues)
+  } = useSimulation({ initialValues, calculatorType })
 
   const SimulationChart = dynamic(
     () => import("./SimulationChart").then(mod => mod.SimulationChart),
@@ -122,11 +140,16 @@ export function Simulator({
     setInflationRate(value)
   }
 
+  function handlePassiveIncomeRateChange(value: number) {
+    trackSimulationStart("passive_income_rate")
+    setPassiveIncomeRate(Math.max(value, 0))
+  }
+
   return (
     <div className="grid lg:grid-cols-2 gap-12">
       <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
         <h2 className="text-2xl font-semibold mb-8 text-slate-800">
-          Simulação de Investimento
+          {formTitle}
         </h2>
 
         <div className="space-y-6">
@@ -201,6 +224,25 @@ export function Simulator({
             )}
           </div>
 
+          {calculatorType === "passive_income" && (
+            <div className="rounded-xl border border-emerald-100 bg-emerald-50/60 p-4">
+              <label className="block text-sm mb-2 text-slate-700">
+                Taxa de retirada ou rendimento alvo (% ao ano)
+              </label>
+
+              <PercentInput
+                value={passiveIncomeRate}
+                onChange={(value) => handlePassiveIncomeRateChange(value)}
+                className={inputStyle()}
+              />
+
+              <p className="mt-2 text-sm text-slate-600 leading-relaxed">
+                Usamos essa taxa para converter o patrimônio final projetado em uma estimativa de renda mensal.
+                No cenário atual, isso corresponde a {currency(passiveIncomeProjection.estimatedMonthlyIncome)} por mês.
+              </p>
+            </div>
+          )}
+
           {showInflation && (
             <div className="mt-8 border-t pt-6">
               <div className="flex items-center justify-between">
@@ -251,26 +293,15 @@ export function Simulator({
       </div>
 
       <div className="grid gap-6">
-        <ResultCard
-          label="Valor Final"
-          value={currency(result.finalAmount)}
-          extra={<GrowthBadge value={result.growthPercent} />}
-        />
-
-        <ResultCard
-          label="Total Investido"
-          value={currency(result.totalInvested)}
-        />
-
-        <ResultCard
-          label="Total em Juros"
-          value={currency(result.totalInterest)}
-        />
-
-        <ResultCard
-          label="Taxa Mensal Equivalente"
-          value={(result.monthlyRate * 100).toFixed(4) + "%"}
-        />
+        {calculatorMetrics.map((metric) => (
+          <ResultCard
+            key={metric.key}
+            label={metric.label}
+            value={formatMetricValue(metric.value, metric.format)}
+            extra={metric.highlightGrowth ? <GrowthBadge value={result.growthPercent} /> : undefined}
+            description={metric.description}
+          />
+        ))}
 
         {isValid && result.history.length > 0 && (
           <div className="lg:col-span-2 mt-8">
