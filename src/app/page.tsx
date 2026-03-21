@@ -15,7 +15,8 @@ export const metadata = buildMetadata({
     "simulador de juros compostos",
     "simulador de aporte mensal",
     "calculadora de valor futuro",
-    "calculadora de renda passiva"
+    "calculadora de renda passiva",
+    "simulador de meta financeira"
   ]
 })
 
@@ -43,6 +44,12 @@ const calculatorCards = [
     title: "Calculadora de Renda Passiva",
     description:
       "Converta o patrimônio acumulado em estimativa de renda mensal recorrente."
+  },
+  {
+    href: "/simulador-meta-financeira",
+    title: "Simulador de Meta Financeira",
+    description:
+      "Descubra quanto investir por mês para atingir uma meta patrimonial em um prazo definido."
   }
 ]
 

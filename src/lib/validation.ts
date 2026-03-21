@@ -27,6 +27,16 @@ export function validateSimulation(
     errors.years = "Tempo deve estar entre 1 e 100 anos"
   }
 
+  if (typeof input.targetAmount === "number") {
+    if (input.targetAmount <= 0) {
+      errors.targetAmount = "Meta deve ser maior que zero"
+    }
+
+    if (input.targetAmount <= input.initialAmount) {
+      errors.targetAmount = "Meta deve ser maior que o capital inicial"
+    }
+  }
+
   if (useInflation) {
     if (inflationRate < 0 || inflationRate > 100) {
       errors.inflationRate = "Inflação deve estar entre 0% e 100%"

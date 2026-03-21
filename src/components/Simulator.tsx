@@ -12,6 +12,7 @@ import { CalculatorType, SimulationInput } from "@/types/simulation"
 import { analyticsEvents, trackEvent } from "@/lib/analytics"
 
 type SimulatorProps = {
+  showTargetAmount?: boolean
   showInitialAmount?: boolean
   showMonthlyContribution?: boolean
   showInflation?: boolean
@@ -43,6 +44,7 @@ export function Simulator({
   showInitialAmount = true,
   showMonthlyContribution = true,
   showInflation = true,
+  showTargetAmount = false,
   initialValues,
   calculatorType = "compound_interest",
   formTitle = "Simulação de Investimento"
@@ -188,6 +190,24 @@ export function Simulator({
             )}
           </div>
 
+          {showTargetAmount && (
+            <div>
+              <label className="block text-sm mb-2">Meta de Patrimônio</label>
+
+              <MoneyInput
+                value={input.targetAmount ?? 0}
+                onChange={(value) => handleFieldUpdate("targetAmount", value)}
+                className={inputStyle(errors.targetAmount)}
+              />
+
+              {errors.targetAmount && (
+                <p className="text-sm text-red-500 mt-1">
+                  {errors.targetAmount}
+                </p>
+              )}
+            </div>
+          )}
+
           {showMonthlyContribution && (
             <div>
               <label className="block text-sm mb-2">Aporte Mensal</label>
@@ -224,6 +244,15 @@ export function Simulator({
               </p>
             )}
           </div>
+
+          {calculatorType === "financial_goal" && (
+            <div className="rounded-xl border border-sky-100 bg-sky-50/70 p-4">
+              <p className="text-sm font-medium text-slate-800">Como esta calculadora funciona</p>
+              <p className="mt-2 text-sm text-slate-600 leading-relaxed">
+                Em vez de pedir um aporte mensal fixo, estimamos quanto você precisaria investir por mês para buscar a meta informada no prazo escolhido.
+              </p>
+            </div>
+          )}
 
           {calculatorType === "passive_income" && (
             <div className="rounded-xl border border-emerald-100 bg-emerald-50/60 p-4">
