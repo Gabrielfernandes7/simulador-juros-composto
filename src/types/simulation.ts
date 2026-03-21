@@ -39,3 +39,24 @@ export interface SimulationComposedResult {
   scenario: SimulationScenario
   result: SimulationResult
 }
+
+export type CalculatorType =
+  | "compound_interest"
+  | "monthly_contribution"
+  | "future_value"
+  | "passive_income"
+
+export interface PassiveIncomeProjection {
+  annualWithdrawalRate: number
+  estimatedAnnualIncome: number
+  estimatedMonthlyIncome: number
+}
+
+export interface CalculatorMetric {
+  key: string
+  label: string
+  value: number
+  format: "currency" | "percent_2" | "percent_decimal_4"
+  description?: string
+  highlightGrowth?: boolean
+}

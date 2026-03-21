@@ -3,6 +3,7 @@ import {
   convertAnnualToMonthlyRate,
   simulateCompoundInterest,
 } from '@/lib/compound'
+import { buildCalculatorMetrics, calculatePassiveIncomeProjection } from '@/lib/simulation'
 
 describe('compound domain', () => {
   it('converts annual rate to equivalent monthly rate', () => {
@@ -96,5 +97,34 @@ describe('compound domain', () => {
 
   it('calculates the real annual rate from nominal rate and inflation', () => {
     expect(calculateRealAnnualRate(10, 4)).toBeCloseTo(5.769230769230775, 12)
+  })
+
+  it('calculates passive income projection from annual withdrawal rate', () => {
+    const projection = calculatePassiveIncomeProjection(1200000, 4)
+
+    expect(projection.annualWithdrawalRate).toBe(4)
+    expect(projection.estimatedAnnualIncome).toBe(48000)
+    expect(projection.estimatedMonthlyIncome).toBe(4000)
+  })
+
+  it('builds calculator-specific metrics for passive income', () => {
+    const result = simulateCompoundInterest({
+      initialAmount: 100000,
+      annualRate: 10,
+      monthlyContribution: 1000,
+      years: 10,
+    })
+
+    const metrics = buildCalculatorMetrics('passive_income', result, {
+      passiveIncomeRate: 5,
+    })
+
+    expect(metrics.map((metric) => metric.label)).toEqual([
+      'Patrimônio Final Projetado',
+      'Renda Mensal Estimada',
+      'Renda Anual Estimada',
+      'Capital Aportado',
+    ])
+    expect(metrics[1].value).toBeCloseTo(result.finalAmount * 0.05 / 12, 10)
   })
 })

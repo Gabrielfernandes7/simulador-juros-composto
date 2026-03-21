@@ -1,12 +1,19 @@
 "use client"
 
 import { useMemo, useState } from "react"
-import { SimulationInput } from "@/types/simulation"
+import {
+  CalculatorMetric,
+  CalculatorType,
+  PassiveIncomeProjection,
+  SimulationInput
+} from "@/types/simulation"
 import { useDebouncedValue } from "@/hooks/useDebouncedValue"
 import { validateSimulation } from "@/lib/validation"
 import {
+  buildCalculatorMetrics,
   buildSimulationResult,
   buildSimulationScenario,
+  calculatePassiveIncomeProjection,
   emptySimulationResult
 } from "@/lib/simulation"
 
@@ -17,7 +24,15 @@ const defaultInput: SimulationInput = {
   years: 5
 }
 
-export function useSimulation(initialValues?: Partial<SimulationInput>) {
+interface UseSimulationOptions {
+  initialValues?: Partial<SimulationInput>
+  calculatorType?: CalculatorType
+}
+
+export function useSimulation({
+  initialValues,
+  calculatorType = "compound_interest"
+}: UseSimulationOptions = {}) {
   const [input, setInput] = useState<SimulationInput>({
     ...defaultInput,
     ...initialValues
@@ -25,9 +40,11 @@ export function useSimulation(initialValues?: Partial<SimulationInput>) {
 
   const [inflationRate, setInflationRate] = useState(4)
   const [useInflation, setUseInflation] = useState(false)
+  const [passiveIncomeRate, setPassiveIncomeRate] = useState(4)
 
   const debouncedInput = useDebouncedValue(input, 300)
   const debouncedInflationRate = useDebouncedValue(inflationRate, 300)
+  const debouncedPassiveIncomeRate = useDebouncedValue(passiveIncomeRate, 300)
 
   const errors = useMemo(() => {
     return validateSimulation(input, inflationRate, useInflation)
@@ -48,6 +65,34 @@ export function useSimulation(initialValues?: Partial<SimulationInput>) {
     return buildSimulationResult(scenario).result
   }, [isValid, scenario])
 
+  const passiveIncomeProjection: PassiveIncomeProjection = useMemo(() => {
+    return calculatePassiveIncomeProjection(result.finalAmount, debouncedPassiveIncomeRate)
+  }, [debouncedPassiveIncomeRate, result.finalAmount])
+
+  const calculatorMetrics: CalculatorMetric[] = useMemo(() => {
+    const metrics = buildCalculatorMetrics(calculatorType, result, {
+      passiveIncomeRate: debouncedPassiveIncomeRate
+    })
+
+    return metrics.map(metric => {
+      if (metric.key === "monthlyContribution") {
+        return {
+          ...metric,
+          value: debouncedInput.monthlyContribution
+        }
+      }
+
+      if (metric.key === "initialCapital") {
+        return {
+          ...metric,
+          value: debouncedInput.initialAmount
+        }
+      }
+
+      return metric
+    })
+  }, [calculatorType, debouncedInput.initialAmount, debouncedInput.monthlyContribution, debouncedPassiveIncomeRate, result])
+
   function updateField<K extends keyof SimulationInput>(
     field: K,
     value: SimulationInput[K]
@@ -67,6 +112,10 @@ export function useSimulation(initialValues?: Partial<SimulationInput>) {
     inflationRate,
     setInflationRate,
     useInflation,
-    setUseInflation
+    setUseInflation,
+    passiveIncomeRate,
+    setPassiveIncomeRate,
+    passiveIncomeProjection,
+    calculatorMetrics
   }
 }
