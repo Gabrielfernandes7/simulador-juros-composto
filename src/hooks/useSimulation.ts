@@ -5,7 +5,9 @@ import {
   CalculatorMetric,
   CalculatorType,
   PassiveIncomeProjection,
-  SimulationInput
+  SimulationInput,
+  TaxBreakdown,
+  TaxSimulationOptions
 } from "@/types/simulation"
 import { useDebouncedValue } from "@/hooks/useDebouncedValue"
 import { validateSimulation } from "@/lib/validation"
@@ -41,6 +43,7 @@ export function useSimulation({
   const [inflationRate, setInflationRate] = useState(4)
   const [useInflation, setUseInflation] = useState(false)
   const [passiveIncomeRate, setPassiveIncomeRate] = useState(4)
+  const [useTaxes, setUseTaxes] = useState(false)
 
   const debouncedInput = useDebouncedValue(input, 300)
   const debouncedInflationRate = useDebouncedValue(inflationRate, 300)
@@ -59,11 +62,30 @@ export function useSimulation({
     })
   }, [debouncedInput, debouncedInflationRate, useInflation])
 
-  const result = useMemo(() => {
-    if (!isValid) return emptySimulationResult
+  const taxOptions: TaxSimulationOptions = useMemo(() => ({
+    enabled: useTaxes,
+    regime: "simplified_income_tax",
+    productRule: "generic_investment"
+  }), [useTaxes])
 
-    return buildSimulationResult(scenario).result
-  }, [isValid, scenario])
+  const composedResult = useMemo(() => {
+    if (!isValid) {
+      return {
+        result: emptySimulationResult,
+        taxes: null as TaxBreakdown | null,
+        taxOptions: {
+          enabled: false,
+          regime: "simplified_income_tax" as const,
+          productRule: "generic_investment" as const,
+          taxRate: 0.15
+        }
+      }
+    }
+
+    return buildSimulationResult(scenario, taxOptions)
+  }, [isValid, scenario, taxOptions])
+
+  const result = composedResult.result
 
   const passiveIncomeProjection: PassiveIncomeProjection = useMemo(() => {
     return calculatePassiveIncomeProjection(result.finalAmount, debouncedPassiveIncomeRate)
@@ -106,6 +128,8 @@ export function useSimulation({
   return {
     input,
     result,
+    taxes: composedResult.taxes,
+    taxOptions: composedResult.taxOptions,
     errors,
     isValid,
     updateField,
@@ -115,6 +139,8 @@ export function useSimulation({
     setUseInflation,
     passiveIncomeRate,
     setPassiveIncomeRate,
+    useTaxes,
+    setUseTaxes,
     passiveIncomeProjection,
     calculatorMetrics
   }

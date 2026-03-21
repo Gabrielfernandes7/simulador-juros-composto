@@ -23,6 +23,33 @@ export interface SimulationResult {
   history: SimulationMonth[]
 }
 
+export interface TaxSimulationOptions {
+  enabled: boolean
+  regime?: "simplified_income_tax"
+  productRule?: "generic_investment"
+  taxRate?: number
+}
+
+export interface TaxBreakdown {
+  regime: "simplified_income_tax"
+  productRule: "generic_investment"
+  educationalDisclaimer: string
+  taxRate: number
+  taxableIncome: number
+  incomeTaxAmount: number
+  grossFinalAmount: number
+  netFinalAmount: number
+  grossInterest: number
+  netInterest: number
+}
+
+export interface TaxComposedResult {
+  grossResult: SimulationResult
+  netResult: SimulationResult
+  taxes: TaxBreakdown | null
+  taxOptions: Required<TaxSimulationOptions>
+}
+
 export interface SimulationOptions {
   inflationRate?: number
   useInflation?: boolean
@@ -37,7 +64,10 @@ export interface SimulationScenario {
 
 export interface SimulationComposedResult {
   scenario: SimulationScenario
+  grossResult: SimulationResult
   result: SimulationResult
+  taxes: TaxBreakdown | null
+  taxOptions: Required<TaxSimulationOptions>
 }
 
 export type CalculatorType =
