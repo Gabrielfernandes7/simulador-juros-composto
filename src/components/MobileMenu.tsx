@@ -1,15 +1,14 @@
 "use client"
 
 import { useState } from "react"
-import Link from "next/link"
 import { navLinks } from "@/config/navigation"
+import { TrackedLink } from "./TrackedLink"
 
 export default function MobileMenu() {
   const [open, setOpen] = useState(false)
 
   return (
     <div className="md:hidden">
-
       <button
         onClick={() => setOpen(!open)}
         className="p-2 rounded-lg hover:bg-slate-100 transition"
@@ -33,25 +32,22 @@ export default function MobileMenu() {
 
       {open && (
         <div className="absolute left-0 top-16 w-full bg-white border-b shadow-sm">
-
           <div className="flex flex-col px-6 py-6 gap-5 text-sm font-medium">
-
             {navLinks.map((link) => (
-              <Link
+              <TrackedLink
                 key={link.href}
                 href={link.href}
+                source="mobile_menu"
+                label={link.label}
                 className="text-slate-700 hover:text-green-600 transition"
                 onClick={() => setOpen(false)}
               >
                 {link.label}
-              </Link>
+              </TrackedLink>
             ))}
-
           </div>
-
         </div>
       )}
-
     </div>
   )
 }
