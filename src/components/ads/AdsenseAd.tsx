@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react"
 import { usePathname } from "next/navigation"
+import { analyticsEvents, trackEvent } from "@/lib/analytics"
 
 declare global {
   interface Window {
@@ -22,9 +23,26 @@ export default function AdsenseAd() {
       return
     }
 
-    const adStatus = adElement.getAttribute("data-adsbygoogle-status")
+    const adStatus = adElement.getAttribute("data-ad-status")
+    const hasRequestedAd = adElement.getAttribute("data-ad-requested") === "true"
 
-    if (adStatus === "done") {
+    if (adStatus === "filled") {
+      trackEvent(analyticsEvents.adSlotFilled, {
+        path: pathname,
+        ad_slot: "9722816732"
+      })
+      return
+    }
+
+    if (adStatus === "unfilled") {
+      trackEvent(analyticsEvents.adSlotUnfilled, {
+        path: pathname,
+        ad_slot: "9722816732"
+      })
+      return
+    }
+
+    if (hasRequestedAd) {
       return
     }
 
@@ -33,13 +51,27 @@ export default function AdsenseAd() {
     )
 
     if (!scriptReady) {
+      trackEvent(analyticsEvents.adScriptMissing, {
+        path: pathname,
+        ad_slot: "9722816732"
+      })
       return
     }
 
     try {
+      adElement.setAttribute("data-ad-requested", "true")
+      trackEvent(analyticsEvents.adPushAttempt, {
+        path: pathname,
+        ad_slot: "9722816732"
+      })
       ;(window.adsbygoogle = window.adsbygoogle || []).push({})
     } catch (err) {
       console.error("Falha ao solicitar anúncio do AdSense:", err)
+      adElement.removeAttribute("data-ad-requested")
+      trackEvent(analyticsEvents.adPushError, {
+        path: pathname,
+        ad_slot: "9722816732"
+      })
     }
   }, [pathname])
 

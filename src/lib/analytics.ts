@@ -2,7 +2,12 @@ export const analyticsEvents = {
   simulationStarted: "simulation_started",
   simulationCompleted: "simulation_completed",
   inflationEnabled: "inflation_enabled",
-  calculatorNavigationClick: "calculator_navigation_click"
+  calculatorNavigationClick: "calculator_navigation_click",
+  adScriptMissing: "ad_script_missing",
+  adPushAttempt: "ad_push_attempt",
+  adPushError: "ad_push_error",
+  adSlotFilled: "ad_slot_filled",
+  adSlotUnfilled: "ad_slot_unfilled"
 } as const
 
 type AnalyticsEventName =
