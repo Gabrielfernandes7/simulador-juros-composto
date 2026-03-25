@@ -15,6 +15,7 @@ const ADSENSE_TEST_MODE = process.env.NEXT_PUBLIC_ADSENSE_TEST_MODE === "true"
 export default function AdsenseAd() {
   const adRef = useRef<HTMLModElement | null>(null)
   const pathname = usePathname()
+  const trackedStatusByRouteRef = useRef<Record<string, { filled: boolean; unfilled: boolean }>>({})
 
   useEffect(() => {
     const adElement = adRef.current
@@ -23,22 +24,34 @@ export default function AdsenseAd() {
       return
     }
 
+    const routeStatus =
+      trackedStatusByRouteRef.current[pathname] ||
+      (trackedStatusByRouteRef.current[pathname] = { filled: false, unfilled: false })
+
+    const trackAdStatus = (status: string | null) => {
+      if (status === "filled" && !routeStatus.filled) {
+        routeStatus.filled = true
+        trackEvent(analyticsEvents.adSlotFilled, {
+          path: pathname,
+          ad_slot: "9722816732"
+        })
+      }
+
+      if (status === "unfilled" && !routeStatus.unfilled) {
+        routeStatus.unfilled = true
+        trackEvent(analyticsEvents.adSlotUnfilled, {
+          path: pathname,
+          ad_slot: "9722816732"
+        })
+      }
+    }
+
     const adStatus = adElement.getAttribute("data-ad-status")
     const hasRequestedAd = adElement.getAttribute("data-ad-requested") === "true"
 
-    if (adStatus === "filled") {
-      trackEvent(analyticsEvents.adSlotFilled, {
-        path: pathname,
-        ad_slot: "9722816732"
-      })
-      return
-    }
+    trackAdStatus(adStatus)
 
-    if (adStatus === "unfilled") {
-      trackEvent(analyticsEvents.adSlotUnfilled, {
-        path: pathname,
-        ad_slot: "9722816732"
-      })
+    if (adStatus === "filled" || adStatus === "unfilled") {
       return
     }
 
@@ -58,6 +71,14 @@ export default function AdsenseAd() {
       return
     }
 
+    const adStatusObserver = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        if (mutation.type === "attributes" && mutation.attributeName === "data-ad-status") {
+          trackAdStatus(adElement.getAttribute("data-ad-status"))
+        }
+      }
+    })
+
     try {
       adElement.setAttribute("data-ad-requested", "true")
       trackEvent(analyticsEvents.adPushAttempt, {
@@ -65,6 +86,11 @@ export default function AdsenseAd() {
         ad_slot: "9722816732"
       })
       ;(window.adsbygoogle = window.adsbygoogle || []).push({})
+
+      adStatusObserver.observe(adElement, {
+        attributes: true,
+        attributeFilter: ["data-ad-status"]
+      })
     } catch (err) {
       console.error("Falha ao solicitar anúncio do AdSense:", err)
       adElement.removeAttribute("data-ad-requested")
@@ -72,6 +98,11 @@ export default function AdsenseAd() {
         path: pathname,
         ad_slot: "9722816732"
       })
+      adStatusObserver.disconnect()
+    }
+
+    return () => {
+      adStatusObserver.disconnect()
     }
   }, [pathname])
 
