@@ -1,6 +1,6 @@
 import { simulateCompoundInterest } from "@/lib/compound"
 import { calculateRequiredMonthlyContribution } from "@/lib/goal"
-import { applySimplifiedTaxToSimulation } from "@/lib/tax"
+import { applyTaxToSimulation } from "@/lib/tax"
 import {
   CalculatorMetric,
   CalculatorType,
@@ -66,7 +66,7 @@ export function buildSimulationResult(
 
   const grossResult = simulateCompoundInterest(normalizedInput)
 
-  const taxedResult = applySimplifiedTaxToSimulation(grossResult, taxOptions)
+  const taxedResult = applyTaxToSimulation(grossResult, taxOptions)
 
   return {
     scenario,

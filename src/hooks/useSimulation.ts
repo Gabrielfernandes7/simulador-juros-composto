@@ -79,7 +79,9 @@ export function useSimulation({
           enabled: false,
           regime: "simplified_income_tax" as const,
           productRule: "generic_investment" as const,
-          taxRate: 0.15
+          calculationMode: "simplified" as const,
+          taxRate: 0.15,
+          holdingDays: 0
         }
       }
     }
