@@ -67,6 +67,8 @@ export function Simulator({
     passiveIncomeProjection,
     calculatorMetrics,
     taxes,
+    useTaxes,
+    setUseTaxes,
     errors,
     isValid
   } = useSimulation({ initialValues, calculatorType })
@@ -277,28 +279,29 @@ export function Simulator({
             <div className="flex items-center justify-between gap-4">
               <div>
                 <p className="text-sm font-medium text-slate-800">
-                  Tributação simplificada (em breve)
+                  Tributação simplificada
                 </p>
                 <p className="mt-1 text-sm text-slate-600 leading-relaxed">
-                  Estrutura preparada para um resultado líquido educacional com IR simplificado sobre rendimento.
-                  Por enquanto, a interface mantém essa opção desativada até a evolução das regras por produto e come-cotas.
+                  Ative para incluir um resultado líquido educacional com IR simplificado sobre o rendimento projetado.
+                  Esta simulação é didática e não substitui regras tributárias reais, come-cotas ou condições específicas de cada produto.
                 </p>
               </div>
 
-              <label className="relative inline-flex items-center cursor-not-allowed opacity-60">
+              <label className="relative inline-flex items-center cursor-pointer">
                 <input
                   type="checkbox"
                   className="sr-only peer"
-                  checked={false}
-                  disabled
-                  aria-label="Ativar tributação simplificada em breve"
+                  checked={useTaxes}
+                  onChange={(e) => setUseTaxes(e.target.checked)}
+                  aria-label="Ativar tributação simplificada"
                 />
 
                 <div className="w-11 h-6 bg-slate-200 rounded-full peer
                   after:content-[''] after:absolute after:top-[2px]
                   after:left-[2px] after:bg-white after:border
                   after:border-slate-300 after:rounded-full
-                  after:h-5 after:w-5 after:transition-all" />
+                  after:h-5 after:w-5 after:transition-all
+                  peer-checked:bg-[#16A34A] peer-checked:after:translate-x-full" />
               </label>
             </div>
           </div>
@@ -370,6 +373,12 @@ export function Simulator({
               {taxes.educationalDisclaimer}
             </p>
             <p className="mt-3">
+              Base tributável estimada: <strong>{formatMetricValue(taxes.taxableIncome, "currency")}</strong>
+            </p>
+            <p className="mt-1">
+              Alíquota simplificada: <strong>{formatMetricValue(taxes.taxRate, "percent_decimal_4")}</strong>
+            </p>
+            <p className="mt-1">
               IR estimado sobre rendimento: <strong>{formatMetricValue(taxes.incomeTaxAmount, "currency")}</strong>
             </p>
           </div>
