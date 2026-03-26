@@ -28,14 +28,23 @@ export interface TaxSimulationOptions {
   enabled: boolean
   regime?: "simplified_income_tax"
   productRule?: "generic_investment"
+  calculationMode?: "simplified" | "regressive_by_days"
   taxRate?: number
+  holdingDays?: number
 }
 
 export interface TaxBreakdown {
   regime: "simplified_income_tax"
   productRule: "generic_investment"
+  calculationMode: "simplified" | "regressive_by_days"
   educationalDisclaimer: string
   taxRate: number
+  holdingDays: number | null
+  appliedBracket: {
+    minDays: number
+    maxDays: number | null
+    taxRate: number
+  } | null
   taxableIncome: number
   incomeTaxAmount: number
   grossFinalAmount: number
