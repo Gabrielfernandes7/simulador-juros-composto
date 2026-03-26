@@ -49,14 +49,31 @@ export default function AdsenseAd() {
     const adStatus = adElement.getAttribute("data-ad-status")
     const hasRequestedAd = adElement.getAttribute("data-ad-requested") === "true"
 
+    const adStatusObserver = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        if (mutation.type === "attributes" && mutation.attributeName === "data-ad-status") {
+          trackAdStatus(adElement.getAttribute("data-ad-status"))
+        }
+      }
+    })
+
+    adStatusObserver.observe(adElement, {
+      attributes: true,
+      attributeFilter: ["data-ad-status"]
+    })
+
     trackAdStatus(adStatus)
 
     if (adStatus === "filled" || adStatus === "unfilled") {
-      return
+      return () => {
+        adStatusObserver.disconnect()
+      }
     }
 
     if (hasRequestedAd) {
-      return
+      return () => {
+        adStatusObserver.disconnect()
+      }
     }
 
     const scriptReady = !!document.querySelector(
@@ -68,16 +85,10 @@ export default function AdsenseAd() {
         path: pathname,
         ad_slot: "9722816732"
       })
-      return
-    }
-
-    const adStatusObserver = new MutationObserver((mutations) => {
-      for (const mutation of mutations) {
-        if (mutation.type === "attributes" && mutation.attributeName === "data-ad-status") {
-          trackAdStatus(adElement.getAttribute("data-ad-status"))
-        }
+      return () => {
+        adStatusObserver.disconnect()
       }
-    })
+    }
 
     try {
       adElement.setAttribute("data-ad-requested", "true")
@@ -87,10 +98,7 @@ export default function AdsenseAd() {
       })
       ;(window.adsbygoogle = window.adsbygoogle || []).push({})
 
-      adStatusObserver.observe(adElement, {
-        attributes: true,
-        attributeFilter: ["data-ad-status"]
-      })
+      trackAdStatus(adElement.getAttribute("data-ad-status"))
     } catch (err) {
       console.error("Falha ao solicitar anúncio do AdSense:", err)
       adElement.removeAttribute("data-ad-requested")
