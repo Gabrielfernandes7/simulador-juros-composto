@@ -1,6 +1,7 @@
 import Link from "next/link"
 import type { Metadata } from "next"
 import AdSlot from "@/components/ads/AdSlot"
+import { TrackedLink } from "@/components/TrackedLink"
 import { JsonLd } from "@/components/seo/JsonLd"
 import { buildArticleSchema, buildBreadcrumbSchema, buildMetadata } from "@/lib/seo"
 
@@ -50,13 +51,36 @@ export default function ArticlePage() {
         <div className="mt-16 bg-white border border-slate-200 rounded-xl p-8 text-center">
           <h3 className="text-xl font-semibold mb-4">Quer simular seus próprios resultados?</h3>
 
-          <Link
-            href="/simulador-juros-compostos"
+          <TrackedLink
+            href="/simulador-juros-compostos?utm_source=blog&utm_medium=artigo&utm_campaign=juros_compostos_basico"
+            source="blog_juros_compostos_cta"
+            label="Simulador de Juros Compostos"
             className="inline-block bg-slate-900 text-white px-6 py-3 rounded-lg font-medium"
           >
             Usar Simulador de Juros Compostos
-          </Link>
+          </TrackedLink>
         </div>
+
+        <section className="mt-14 border-t border-slate-200 pt-8">
+          <h2 className="text-2xl font-semibold mb-4">Leituras e ferramentas relacionadas</h2>
+          <ul className="list-disc pl-6 space-y-2 text-blue-700">
+            <li>
+              <Link href="/blog/juros-simples-vs-compostos">Juros simples vs juros compostos</Link>
+            </li>
+            <li>
+              <Link href="/blog/tabela-regressiva-ir-renda-fixa">Tabela regressiva de IR em renda fixa</Link>
+            </li>
+            <li>
+              <TrackedLink
+                href="/simulador-aporte-mensal?utm_source=blog&utm_medium=interlink&utm_campaign=juros_compostos_basico"
+                source="blog_juros_compostos_related"
+                label="Simulador de Aporte Mensal"
+              >
+                Simulador de Aporte Mensal
+              </TrackedLink>
+            </li>
+          </ul>
+        </section>
       </article>
 
       <AdSlot pageType="content" />
