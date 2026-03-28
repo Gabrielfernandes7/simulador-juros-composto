@@ -46,31 +46,34 @@ export default function AdsenseAd() {
       }
     }
 
+    const connectAdStatusObserver = () => {
+      const adStatusObserver = new MutationObserver((mutations) => {
+        for (const mutation of mutations) {
+          if (mutation.type === "attributes" && mutation.attributeName === "data-ad-status") {
+            trackAdStatus(adElement.getAttribute("data-ad-status"))
+          }
+        }
+      })
+
+      adStatusObserver.observe(adElement, {
+        attributes: true,
+        attributeFilter: ["data-ad-status"]
+      })
+
+      return adStatusObserver
+    }
+
     const adStatus = adElement.getAttribute("data-ad-status")
     const hasRequestedAd = adElement.getAttribute("data-ad-requested") === "true"
-
-    const adStatusObserver = new MutationObserver((mutations) => {
-      for (const mutation of mutations) {
-        if (mutation.type === "attributes" && mutation.attributeName === "data-ad-status") {
-          trackAdStatus(adElement.getAttribute("data-ad-status"))
-        }
-      }
-    })
-
-    adStatusObserver.observe(adElement, {
-      attributes: true,
-      attributeFilter: ["data-ad-status"]
-    })
 
     trackAdStatus(adStatus)
 
     if (adStatus === "filled" || adStatus === "unfilled") {
-      return () => {
-        adStatusObserver.disconnect()
-      }
+      return
     }
 
     if (hasRequestedAd) {
+      const adStatusObserver = connectAdStatusObserver()
       return () => {
         adStatusObserver.disconnect()
       }
@@ -85,10 +88,10 @@ export default function AdsenseAd() {
         path: pathname,
         ad_slot: "9722816732"
       })
-      return () => {
-        adStatusObserver.disconnect()
-      }
+      return
     }
+
+    let adStatusObserver: MutationObserver | null = null
 
     try {
       adElement.setAttribute("data-ad-requested", "true")
@@ -98,6 +101,7 @@ export default function AdsenseAd() {
       })
       ;(window.adsbygoogle = window.adsbygoogle || []).push({})
 
+      adStatusObserver = connectAdStatusObserver()
       trackAdStatus(adElement.getAttribute("data-ad-status"))
     } catch (err) {
       console.error("Falha ao solicitar anúncio do AdSense:", err)
@@ -106,11 +110,10 @@ export default function AdsenseAd() {
         path: pathname,
         ad_slot: "9722816732"
       })
-      adStatusObserver.disconnect()
     }
 
     return () => {
-      adStatusObserver.disconnect()
+      adStatusObserver?.disconnect()
     }
   }, [pathname])
 
