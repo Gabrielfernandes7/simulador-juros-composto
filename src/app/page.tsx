@@ -89,6 +89,24 @@ export default function Home() {
         </div>
       </section>
 
+
+      <section className="max-w-4xl mx-auto px-6 pb-16">
+        <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+          <h2 className="text-2xl font-semibold text-slate-900">Transparência e políticas do projeto</h2>
+          <p className="mt-4 leading-7 text-slate-700">
+            Para manter conformidade com boas práticas de monetização e melhorar a avaliação do site,
+            disponibilizamos páginas institucionais com informações de privacidade, termos de uso, contato
+            e escopo editorial.
+          </p>
+          <div className="mt-5 flex flex-wrap gap-4 text-sm font-medium">
+            <TrackedLink className="text-green-700 hover:text-green-800" href="/sobre" source="home_compliance" label="Sobre">Sobre o projeto</TrackedLink>
+            <TrackedLink className="text-green-700 hover:text-green-800" href="/privacidade" source="home_compliance" label="Privacidade">Política de Privacidade</TrackedLink>
+            <TrackedLink className="text-green-700 hover:text-green-800" href="/termos" source="home_compliance" label="Termos">Termos de Uso</TrackedLink>
+            <TrackedLink className="text-green-700 hover:text-green-800" href="/contato" source="home_compliance" label="Contato">Contato</TrackedLink>
+          </div>
+        </div>
+      </section>
+
       <section className="max-w-6xl mx-auto px-6 py-16">
         <div className="flex items-end justify-between gap-4 flex-wrap mb-8">
           <div>

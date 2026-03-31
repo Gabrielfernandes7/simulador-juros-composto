@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { navLinks } from "@/config/navigation"
+import { institutionalNavLinks, primaryNavLinks } from "@/config/navigation"
 import { TrackedLink } from "./TrackedLink"
 
 export default function MobileMenu() {
@@ -12,6 +12,9 @@ export default function MobileMenu() {
       <button
         onClick={() => setOpen(!open)}
         className="p-2 rounded-lg hover:bg-slate-100 transition"
+        aria-expanded={open}
+        aria-controls="mobile-navigation"
+        aria-label={open ? "Fechar menu" : "Abrir menu"}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -31,13 +34,28 @@ export default function MobileMenu() {
       </button>
 
       {open && (
-        <div className="absolute left-0 top-16 w-full bg-white border-b shadow-sm">
+        <div id="mobile-navigation" className="absolute left-0 top-16 w-full bg-white border-b shadow-sm">
           <div className="flex flex-col px-6 py-6 gap-5 text-sm font-medium">
-            {navLinks.map((link) => (
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Calculadoras</p>
+            {primaryNavLinks.map((link) => (
               <TrackedLink
                 key={link.href}
                 href={link.href}
                 source="mobile_menu"
+                label={link.label}
+                className="text-slate-700 hover:text-green-600 transition"
+                onClick={() => setOpen(false)}
+              >
+                {link.label}
+              </TrackedLink>
+            ))}
+
+            <p className="mt-2 text-xs font-semibold uppercase tracking-wide text-slate-500">Institucional</p>
+            {institutionalNavLinks.map((link) => (
+              <TrackedLink
+                key={link.href}
+                href={link.href}
+                source="mobile_menu_institutional"
                 label={link.label}
                 className="text-slate-700 hover:text-green-600 transition"
                 onClick={() => setOpen(false)}

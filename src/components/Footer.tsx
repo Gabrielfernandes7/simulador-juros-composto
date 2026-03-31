@@ -1,12 +1,5 @@
 import Link from "next/link"
-
-const institutionalLinks = [
-  { href: "/sobre", label: "Sobre" },
-  { href: "/privacidade", label: "Privacidade" },
-  { href: "/termos", label: "Termos" },
-  { href: "/contato", label: "Contato" },
-  { href: "/blog", label: "Blog" },
-]
+import { institutionalNavLinks } from "@/config/navigation"
 
 export default function Footer() {
   return (
@@ -30,7 +23,7 @@ export default function Footer() {
         <nav aria-label="Links institucionais">
           <p className="text-sm font-semibold text-slate-900">Links úteis</p>
           <ul className="mt-3 space-y-2 text-sm text-slate-600">
-            {institutionalLinks.map((link) => (
+            {institutionalNavLinks.map((link) => (
               <li key={link.href}>
                 <Link className="transition hover:text-green-600" href={link.href}>
                   {link.label}
