@@ -121,12 +121,18 @@ type ArticleSchemaInput = {
   title: string
   description: string
   path: string
+  publishedAt?: string
+  updatedAt?: string
+  authorName?: string
 }
 
 export function buildArticleSchema({
   title,
   description,
-  path
+  path,
+  publishedAt,
+  updatedAt,
+  authorName = siteConfig.name
 }: ArticleSchemaInput) {
   const url = getCanonicalUrl(path)
 
@@ -139,12 +145,14 @@ export function buildArticleSchema({
     mainEntityOfPage: url,
     author: {
       "@type": "Organization",
-      name: siteConfig.name
+      name: authorName
     },
     publisher: {
       "@type": "Organization",
       name: siteConfig.name
     },
+    datePublished: publishedAt,
+    dateModified: updatedAt ?? publishedAt,
     url
   }
 }

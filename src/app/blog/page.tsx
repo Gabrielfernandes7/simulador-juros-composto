@@ -1,6 +1,7 @@
 import Link from "next/link"
 import type { Metadata } from "next"
 import AdSlot from "@/components/ads/AdSlot"
+import Navbar from "@/components/Navbar"
 import { JsonLd } from "@/components/seo/JsonLd"
 import { buildBreadcrumbSchema, buildCollectionPageSchema, buildMetadata } from "@/lib/seo"
 
@@ -42,6 +43,8 @@ const posts = [
 export default function BlogPage() {
   return (
     <main className="min-h-screen bg-[#F8FAF9] text-[#0F172A]">
+      <Navbar title="Simulador de Juros Compostos" />
+
       <section className="max-w-4xl mx-auto px-6 pt-20 pb-16">
         <h1 className="text-4xl font-bold mb-6">Blog de apoio às calculadoras</h1>
 

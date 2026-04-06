@@ -35,6 +35,18 @@ export default function SobrePage() {
           análise individual de produtos financeiros nem recomendação
           profissional personalizada.
         </p>
+
+        <h2 className="mt-12 text-2xl font-semibold">Política editorial e atualização</h2>
+        <p className="mt-6 leading-8 text-slate-700">
+          Os conteúdos passam por revisão interna de consistência matemática e
+          clareza didática antes da publicação. Artigos e calculadoras podem
+          ser atualizados quando houver ajustes de metodologia, melhoria de
+          explicação ou necessidade de correções.
+        </p>
+        <p className="mt-4 leading-8 text-slate-700">
+          Sempre que aplicável, mostramos data de publicação e data de última
+          atualização nas páginas de conteúdo para garantir transparência.
+        </p>
       </section>
     </main>
   )

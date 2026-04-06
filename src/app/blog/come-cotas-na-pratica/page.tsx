@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import AdSlot from "@/components/ads/AdSlot"
+import Navbar from "@/components/Navbar"
 import { TrackedLink } from "@/components/TrackedLink"
 import { JsonLd } from "@/components/seo/JsonLd"
 import { buildArticleSchema, buildBreadcrumbSchema, buildMetadata } from "@/lib/seo"
@@ -8,6 +9,8 @@ import { buildArticleSchema, buildBreadcrumbSchema, buildMetadata } from "@/lib/
 const title = "Come-cotas na prática: impacto real nos fundos"
 const description =
   "Veja o que é come-cotas, quando ele acontece e como esse adiantamento de IR afeta o crescimento do seu patrimônio em fundos de investimento."
+const publishedAt = "2026-03-27"
+const updatedAt = "2026-04-06"
 
 export const metadata: Metadata = buildMetadata({
   title,
@@ -25,8 +28,14 @@ export const metadata: Metadata = buildMetadata({
 export default function ArticlePage() {
   return (
     <main className="min-h-screen bg-[#F8FAF9] text-[#0F172A]">
+      <Navbar title="Simulador de Juros Compostos" />
+
       <article className="max-w-3xl mx-auto px-6 pt-20 pb-24">
         <h1 className="text-4xl font-bold mb-8">Come-cotas na prática</h1>
+        <p className="mb-6 text-sm text-slate-500">
+          Publicado em 27 de março de 2026 • Atualizado em 6 de abril de 2026 • Equipe Simulador de
+          Juros Compostos
+        </p>
 
         <p className="text-slate-700 leading-relaxed mb-6">
           Come-cotas é a antecipação semestral do Imposto de Renda em muitos fundos de renda fixa e
@@ -99,7 +108,13 @@ export default function ArticlePage() {
 
       <JsonLd
         data={[
-          buildArticleSchema({ title, description, path: "/blog/come-cotas-na-pratica" }),
+          buildArticleSchema({
+            title,
+            description,
+            path: "/blog/come-cotas-na-pratica",
+            publishedAt,
+            updatedAt
+          }),
           buildBreadcrumbSchema([
             { name: "Início", path: "/" },
             { name: "Blog", path: "/blog" },

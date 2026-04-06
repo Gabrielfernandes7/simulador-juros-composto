@@ -7,9 +7,9 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: ["/api/", "/_next/"], // Impede o bot de gastar tempo com arquivos internos
+      disallow: ["/api/"], // Mantém apenas endpoints internos fora do rastreamento
     },
-    // 🟢 CRÍTICO: O robô usa isso para descobrir todas as suas calculadoras
+    // Sitemap explícito para acelerar descoberta das páginas públicas
     sitemap: `${baseUrl}/sitemap.xml`,
   };
 }
