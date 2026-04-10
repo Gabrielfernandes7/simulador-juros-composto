@@ -150,6 +150,16 @@ export function Simulator({
     setPassiveIncomeRate(Math.max(value, 0))
   }
 
+  const fieldIds = {
+    initialAmount: "initialAmount",
+    annualRate: "annualRate",
+    targetAmount: "targetAmount",
+    monthlyContribution: "monthlyContribution",
+    years: "years",
+    inflationRate: "inflationRate",
+    passiveIncomeRate: "passiveIncomeRate"
+  } as const
+
   return (
     <div className="grid lg:grid-cols-2 gap-12">
       <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
@@ -160,16 +170,19 @@ export function Simulator({
         <div className="space-y-6">
           {showInitialAmount && (
             <div>
-              <label className="block text-sm mb-2">Capital Inicial</label>
+              <label htmlFor={fieldIds.initialAmount} className="block text-sm mb-2">Capital Inicial</label>
 
               <MoneyInput
+                id={fieldIds.initialAmount}
                 value={input.initialAmount}
                 onChange={(value) => handleFieldUpdate("initialAmount", value)}
                 className={inputStyle(errors.initialAmount)}
+                ariaInvalid={Boolean(errors.initialAmount)}
+                ariaDescribedBy={errors.initialAmount ? `${fieldIds.initialAmount}-error` : undefined}
               />
 
               {errors.initialAmount && (
-                <p className="text-sm text-red-500 mt-1">
+                <p id={`${fieldIds.initialAmount}-error`} className="text-sm text-red-500 mt-1">
                   {errors.initialAmount}
                 </p>
               )}
@@ -177,16 +190,19 @@ export function Simulator({
           )}
 
           <div>
-            <label className="block text-sm mb-2">Taxa Anual (%)</label>
+            <label htmlFor={fieldIds.annualRate} className="block text-sm mb-2">Taxa Anual (%)</label>
 
             <PercentInput
+              id={fieldIds.annualRate}
               value={input.annualRate}
               onChange={(value) => handleFieldUpdate("annualRate", value)}
               className={inputStyle(errors.annualRate)}
+              ariaInvalid={Boolean(errors.annualRate)}
+              ariaDescribedBy={errors.annualRate ? `${fieldIds.annualRate}-error` : undefined}
             />
 
             {errors.annualRate && (
-              <p className="text-sm text-red-500 mt-1">
+              <p id={`${fieldIds.annualRate}-error`} className="text-sm text-red-500 mt-1">
                 {errors.annualRate}
               </p>
             )}
@@ -194,16 +210,19 @@ export function Simulator({
 
           {showTargetAmount && (
             <div>
-              <label className="block text-sm mb-2">Meta de Patrimônio</label>
+              <label htmlFor={fieldIds.targetAmount} className="block text-sm mb-2">Meta de Patrimônio</label>
 
               <MoneyInput
+                id={fieldIds.targetAmount}
                 value={input.targetAmount ?? 0}
                 onChange={(value) => handleFieldUpdate("targetAmount", value)}
                 className={inputStyle(errors.targetAmount)}
+                ariaInvalid={Boolean(errors.targetAmount)}
+                ariaDescribedBy={errors.targetAmount ? `${fieldIds.targetAmount}-error` : undefined}
               />
 
               {errors.targetAmount && (
-                <p className="text-sm text-red-500 mt-1">
+                <p id={`${fieldIds.targetAmount}-error`} className="text-sm text-red-500 mt-1">
                   {errors.targetAmount}
                 </p>
               )}
@@ -212,16 +231,19 @@ export function Simulator({
 
           {showMonthlyContribution && (
             <div>
-              <label className="block text-sm mb-2">Aporte Mensal</label>
+              <label htmlFor={fieldIds.monthlyContribution} className="block text-sm mb-2">Aporte Mensal</label>
 
               <MoneyInput
+                id={fieldIds.monthlyContribution}
                 value={input.monthlyContribution}
                 onChange={(value) => handleFieldUpdate("monthlyContribution", value)}
                 className={inputStyle(errors.monthlyContribution)}
+                ariaInvalid={Boolean(errors.monthlyContribution)}
+                ariaDescribedBy={errors.monthlyContribution ? `${fieldIds.monthlyContribution}-error` : undefined}
               />
 
               {errors.monthlyContribution && (
-                <p className="text-sm text-red-500 mt-1">
+                <p id={`${fieldIds.monthlyContribution}-error`} className="text-sm text-red-500 mt-1">
                   {errors.monthlyContribution}
                 </p>
               )}
@@ -229,19 +251,26 @@ export function Simulator({
           )}
 
           <div>
-            <label className="block text-sm mb-2">Tempo (anos)</label>
+            <label htmlFor={fieldIds.years} className="block text-sm mb-2">Tempo (anos)</label>
 
             <input
+              id={fieldIds.years}
               type="number"
               value={input.years}
+              min={1}
+              max={100}
+              step={1}
+              inputMode="numeric"
               onChange={e =>
                 handleFieldUpdate("years", Number(e.target.value))
               }
               className={inputStyle(errors.years)}
+              aria-invalid={Boolean(errors.years)}
+              aria-describedby={errors.years ? `${fieldIds.years}-error` : undefined}
             />
 
             {errors.years && (
-              <p className="text-sm text-red-500 mt-1">
+              <p id={`${fieldIds.years}-error`} className="text-sm text-red-500 mt-1">
                 {errors.years}
               </p>
             )}
@@ -258,14 +287,16 @@ export function Simulator({
 
           {calculatorType === "passive_income" && (
             <div className="rounded-xl border border-emerald-100 bg-emerald-50/60 p-4">
-              <label className="block text-sm mb-2 text-slate-700">
+              <label htmlFor={fieldIds.passiveIncomeRate} className="block text-sm mb-2 text-slate-700">
                 Taxa de retirada ou rendimento alvo (% ao ano)
               </label>
 
               <PercentInput
+                id={fieldIds.passiveIncomeRate}
                 value={passiveIncomeRate}
                 onChange={(value) => handlePassiveIncomeRateChange(value)}
                 className={inputStyle()}
+                ariaInvalid={false}
               />
 
               <p className="mt-2 text-sm text-slate-600 leading-relaxed">
@@ -333,18 +364,21 @@ export function Simulator({
 
               {useInflation && (
                 <div className="mt-4">
-                  <label className="block text-sm mb-2 text-slate-600">
+                  <label htmlFor={fieldIds.inflationRate} className="block text-sm mb-2 text-slate-600">
                     Inflação anual (%)
                   </label>
 
                   <PercentInput
+                    id={fieldIds.inflationRate}
                     value={inflationRate}
                     onChange={(value) => handleInflationRateChange(value)}
                     className={inputStyle(errors.inflationRate)}
+                    ariaInvalid={Boolean(errors.inflationRate)}
+                    ariaDescribedBy={errors.inflationRate ? `${fieldIds.inflationRate}-error` : undefined}
                   />
 
                   {errors.inflationRate && (
-                    <p className="text-sm text-red-500 mt-1">
+                    <p id={`${fieldIds.inflationRate}-error`} className="text-sm text-red-500 mt-1">
                       {errors.inflationRate}
                     </p>
                   )}

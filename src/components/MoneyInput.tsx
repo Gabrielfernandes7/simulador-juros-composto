@@ -6,6 +6,9 @@ type Props = {
   value: number
   onChange: (value: number) => void
   className?: string
+  id?: string
+  ariaInvalid?: boolean
+  ariaDescribedBy?: string
 }
 
 function formatBRL(value: number) {
@@ -26,7 +29,14 @@ function parseBRL(value: string) {
   return Number(cleaned) || 0
 }
 
-export function MoneyInput({ value, onChange, className }: Props) {
+export function MoneyInput({
+  value,
+  onChange,
+  className,
+  id,
+  ariaInvalid,
+  ariaDescribedBy
+}: Props) {
   const [display, setDisplay] = useState("")
   const [isFocused, setIsFocused] = useState(false)
 
@@ -52,6 +62,7 @@ export function MoneyInput({ value, onChange, className }: Props) {
 
   return (
     <input
+      id={id}
       type="text"
       inputMode="decimal"
       value={displayedValue}
@@ -59,6 +70,8 @@ export function MoneyInput({ value, onChange, className }: Props) {
       onBlur={handleBlur}
       onChange={handleChange}
       className={className}
+      aria-invalid={ariaInvalid}
+      aria-describedby={ariaDescribedBy}
     />
   )
 }
