@@ -6,9 +6,19 @@ type Props = {
   value: number
   onChange: (value: number) => void
   className?: string
+  id?: string
+  ariaInvalid?: boolean
+  ariaDescribedBy?: string
 }
 
-export function PercentInput({ value, onChange, className }: Props) {
+export function PercentInput({
+  value,
+  onChange,
+  className,
+  id,
+  ariaInvalid,
+  ariaDescribedBy
+}: Props) {
   const [displayValue, setDisplayValue] = useState("")
   const [isFocused, setIsFocused] = useState(false)
 
@@ -46,6 +56,7 @@ export function PercentInput({ value, onChange, className }: Props) {
 
   return (
     <input
+      id={id}
       type="text"
       inputMode="decimal"
       value={resolvedValue}
@@ -54,6 +65,8 @@ export function PercentInput({ value, onChange, className }: Props) {
       onChange={handleChange}
       className={className}
       placeholder="0,00"
+      aria-invalid={ariaInvalid}
+      aria-describedby={ariaDescribedBy}
     />
   )
 }
