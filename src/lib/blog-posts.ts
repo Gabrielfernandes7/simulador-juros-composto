@@ -1,6 +1,6 @@
 export type BlogPostMetadata = {
   slug: string
-  path: `/blog/${string}`
+  path: string
   title: string
   description: string
   publishedAt: `${number}-${number}-${number}`
