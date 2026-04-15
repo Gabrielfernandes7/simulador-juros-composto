@@ -5,17 +5,15 @@ import Navbar from "@/components/Navbar"
 import { TrackedLink } from "@/components/TrackedLink"
 import { JsonLd } from "@/components/seo/JsonLd"
 import { buildArticleSchema, buildBreadcrumbSchema, buildMetadata } from "@/lib/seo"
+import { getBlogPostBySlug } from "@/lib/blog-posts"
 
-const title = "Come-cotas na prática: impacto real nos fundos"
-const description =
-  "Veja o que é come-cotas, quando ele acontece e como esse adiantamento de IR afeta o crescimento do seu patrimônio em fundos de investimento."
-const publishedAt = "2026-03-27"
-const updatedAt = "2026-04-06"
+const post = getBlogPostBySlug("come-cotas-na-pratica")
+const { title, description, publishedAt, updatedAt } = post
 
 export const metadata: Metadata = buildMetadata({
   title,
   description,
-  path: "/blog/come-cotas-na-pratica",
+  path: post.path,
   keywords: [
     "come-cotas",
     "come-cotas fundos",
@@ -33,8 +31,8 @@ export default function ArticlePage() {
       <article className="max-w-3xl mx-auto px-6 pt-20 pb-24">
         <h1 className="text-4xl font-bold mb-8">Come-cotas na prática</h1>
         <p className="mb-6 text-sm text-slate-500">
-          Publicado em 27 de março de 2026 • Atualizado em 6 de abril de 2026 • Equipe Simulador de
-          Juros Compostos
+          Publicado em {publishedAt} • Atualizado em {updatedAt} • Equipe Simulador de Juros
+          Compostos
         </p>
 
         <p className="text-slate-700 leading-relaxed mb-6">
@@ -111,14 +109,14 @@ export default function ArticlePage() {
           buildArticleSchema({
             title,
             description,
-            path: "/blog/come-cotas-na-pratica",
+            path: post.path,
             publishedAt,
             updatedAt
           }),
           buildBreadcrumbSchema([
             { name: "Início", path: "/" },
             { name: "Blog", path: "/blog" },
-            { name: "Come-cotas na prática", path: "/blog/come-cotas-na-pratica" }
+            { name: "Come-cotas na prática", path: post.path }
           ])
         ]}
       />
