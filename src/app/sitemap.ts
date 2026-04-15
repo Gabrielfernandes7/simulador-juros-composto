@@ -1,93 +1,35 @@
 import { MetadataRoute } from "next"
+import blogPosts from "@/lib/blog-posts"
+import { indexableRoutes, SITE_CONTENT_LAST_MODIFIED, type SiteRoute } from "@/lib/site-routes"
 
 const baseUrl = "https://simulador-juros-composto.vercel.app"
 
-type RouteConfig = {
-  route: string
-  lastModified: string
-  changeFrequency?: MetadataRoute.Sitemap[number]["changeFrequency"]
-  priority?: number
+const blogLastModifiedByPath = new Map(
+  blogPosts.map((post) => [post.path, post.updatedAt ?? post.publishedAt])
+)
+
+const latestBlogUpdate = blogPosts.reduce(
+  (latest, post) => (post.updatedAt > latest ? post.updatedAt : latest),
+  "1970-01-01"
+)
+
+function getLastModified(route: SiteRoute): string {
+  if (route.type === "blog-article") {
+    return blogLastModifiedByPath.get(route.path) ?? SITE_CONTENT_LAST_MODIFIED
+  }
+
+  if (route.type === "blog-index") {
+    return latestBlogUpdate || SITE_CONTENT_LAST_MODIFIED
+  }
+
+  return SITE_CONTENT_LAST_MODIFIED
 }
 
-const routes: RouteConfig[] = [
-  {
-    route: "",
-    lastModified: "2026-03-27",
-    changeFrequency: "weekly",
-    priority: 1,
-  },
-  {
-    route: "/simulador-juros-compostos",
-    lastModified: "2026-03-27",
-    changeFrequency: "weekly",
-    priority: 0.9,
-  },
-  {
-    route: "/simulador-aporte-mensal",
-    lastModified: "2026-03-27",
-    changeFrequency: "weekly",
-    priority: 0.9,
-  },
-  {
-    route: "/simulador-renda-passiva",
-    lastModified: "2026-03-27",
-    changeFrequency: "weekly",
-    priority: 0.9,
-  },
-  {
-    route: "/simulador-meta-financeira",
-    lastModified: "2026-03-27",
-    changeFrequency: "weekly",
-    priority: 0.9,
-  },
-  {
-    route: "/simulador-valor-futuro",
-    lastModified: "2026-03-27",
-    changeFrequency: "weekly",
-    priority: 0.9,
-  },
-  {
-    route: "/blog",
-    lastModified: "2026-03-27",
-    changeFrequency: "weekly",
-    priority: 0.8,
-  },
-  {
-    route: "/blog/o-que-sao-juros-compostos",
-    lastModified: "2026-03-27",
-    changeFrequency: "monthly",
-    priority: 0.7,
-  },
-  {
-    route: "/blog/juros-simples-vs-compostos",
-    lastModified: "2026-03-27",
-    changeFrequency: "monthly",
-    priority: 0.7,
-  },
-  // Quando publicar novos artigos pilares, inclua as rotas aqui com data real de atualização.
-  {
-    route: "/sobre",
-    lastModified: "2026-03-27",
-  },
-  {
-    route: "/privacidade",
-    lastModified: "2026-03-27",
-  },
-  {
-    route: "/termos",
-    lastModified: "2026-03-27",
-  },
-  {
-    route: "/contato",
-    lastModified: "2026-03-27",
-  },
-]
-
 export default function sitemap(): MetadataRoute.Sitemap {
-  return routes.map(({ route, lastModified, changeFrequency, priority }) => ({
-    url: `${baseUrl}${route}`,
-    lastModified: new Date(`${lastModified}T00:00:00.000Z`),
+  return indexableRoutes.map(({ path, changeFrequency, priority, type }) => ({
+    url: `${baseUrl}${path}`,
+    lastModified: new Date(`${getLastModified({ path, changeFrequency, priority, type })}T00:00:00.000Z`),
     changeFrequency,
-    priority,
+    priority
   }))
 }

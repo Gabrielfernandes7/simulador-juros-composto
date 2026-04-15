@@ -4,6 +4,7 @@ import AdSlot from "@/components/ads/AdSlot"
 import Navbar from "@/components/Navbar"
 import { JsonLd } from "@/components/seo/JsonLd"
 import { buildBreadcrumbSchema, buildCollectionPageSchema, buildMetadata } from "@/lib/seo"
+import blogPosts from "@/lib/blog-posts"
 
 export const metadata: Metadata = buildMetadata({
   title: "Blog de educação financeira e simuladores",
@@ -13,32 +14,12 @@ export const metadata: Metadata = buildMetadata({
   keywords: ["blog de investimentos", "educação financeira", "simuladores financeiros", "renda fixa"]
 })
 
-const posts = [
-  {
-    href: "/blog/o-que-sao-juros-compostos",
-    title: "O que são juros compostos?",
-    description:
-      "Entenda o conceito de crescimento exponencial e como ele impacta investimentos de longo prazo."
-  },
-  {
-    href: "/blog/juros-simples-vs-compostos",
-    title: "Juros Simples vs Juros Compostos",
-    description:
-      "Compare os regimes de capitalização e veja quando a diferença se torna relevante."
-  },
-  {
-    href: "/blog/tabela-regressiva-ir-renda-fixa",
-    title: "Tabela regressiva de IR em renda fixa",
-    description:
-      "Aprenda as faixas de alíquota do IR, calcule rendimento líquido e compare cenários por prazo."
-  },
-  {
-    href: "/blog/come-cotas-na-pratica",
-    title: "Come-cotas na prática",
-    description:
-      "Veja como a antecipação semestral de IR em fundos impacta seu patrimônio ao longo do tempo."
-  }
-]
+const posts = blogPosts.map((post) => ({
+  href: post.path,
+  title: post.title,
+  description: post.description
+}))
+
 
 export default function BlogPage() {
   return (

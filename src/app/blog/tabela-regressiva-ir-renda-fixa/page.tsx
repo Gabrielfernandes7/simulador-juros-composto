@@ -5,17 +5,15 @@ import Navbar from "@/components/Navbar"
 import { TrackedLink } from "@/components/TrackedLink"
 import { JsonLd } from "@/components/seo/JsonLd"
 import { buildArticleSchema, buildBreadcrumbSchema, buildMetadata } from "@/lib/seo"
+import { getBlogPostBySlug } from "@/lib/blog-posts"
 
-const title = "Tabela regressiva de IR em renda fixa: guia prático"
-const description =
-  "Entenda como funciona a tabela regressiva de IR em CDB, Tesouro e outros títulos, com cálculo completo de alíquota e rendimento líquido."
-const publishedAt = "2026-03-27"
-const updatedAt = "2026-04-06"
+const post = getBlogPostBySlug("tabela-regressiva-ir-renda-fixa")
+const { title, description, publishedAt, updatedAt } = post
 
 export const metadata: Metadata = buildMetadata({
   title,
   description,
-  path: "/blog/tabela-regressiva-ir-renda-fixa",
+  path: post.path,
   keywords: [
     "tabela regressiva ir renda fixa",
     "imposto de renda cdb",
@@ -33,8 +31,8 @@ export default function ArticlePage() {
       <article className="max-w-3xl mx-auto px-6 pt-20 pb-24">
         <h1 className="text-4xl font-bold mb-8">Tabela regressiva de IR em renda fixa</h1>
         <p className="mb-6 text-sm text-slate-500">
-          Publicado em 27 de março de 2026 • Atualizado em 6 de abril de 2026 • Equipe Simulador de
-          Juros Compostos
+          Publicado em {publishedAt} • Atualizado em {updatedAt} • Equipe Simulador de Juros
+          Compostos
         </p>
 
         <p className="text-slate-700 leading-relaxed mb-6">
@@ -117,14 +115,14 @@ export default function ArticlePage() {
           buildArticleSchema({
             title,
             description,
-            path: "/blog/tabela-regressiva-ir-renda-fixa",
+            path: post.path,
             publishedAt,
             updatedAt
           }),
           buildBreadcrumbSchema([
             { name: "Início", path: "/" },
             { name: "Blog", path: "/blog" },
-            { name: "Tabela regressiva de IR em renda fixa", path: "/blog/tabela-regressiva-ir-renda-fixa" }
+            { name: "Tabela regressiva de IR em renda fixa", path: post.path }
           ])
         ]}
       />
