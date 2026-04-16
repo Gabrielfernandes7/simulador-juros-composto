@@ -1,7 +1,7 @@
 import Link from "next/link"
 import type { Metadata } from "next"
-import AdSlot from "@/components/ads/AdSlot"
 import Navbar from "@/components/Navbar"
+import AdSlot from "@/components/ads/AdSlot"
 import { JsonLd } from "@/components/seo/JsonLd"
 import { buildBreadcrumbSchema, buildCollectionPageSchema, buildMetadata } from "@/lib/seo"
 import blogPosts from "@/lib/blog-posts"

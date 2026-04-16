@@ -4,7 +4,12 @@ import { Simulator } from "@/components/Simulator"
 import AdSlot from "@/components/ads/AdSlot"
 import { JsonLd } from "@/components/seo/JsonLd"
 import { TrackedLink } from "@/components/TrackedLink"
-import { buildBreadcrumbSchema, buildMetadata, buildWebApplicationSchema } from "@/lib/seo"
+import {
+  buildBreadcrumbSchema,
+  buildFaqSchema,
+  buildMetadata,
+  buildWebApplicationSchema
+} from "@/lib/seo"
 
 export const metadata = buildMetadata({
   title: "Calculadora de renda passiva",
@@ -13,6 +18,24 @@ export const metadata = buildMetadata({
   path: "/simulador-renda-passiva",
   keywords: ["calculadora de renda passiva", "quanto preciso para viver de renda"]
 })
+
+const faqItems = [
+  {
+    question: "Como a calculadora estima a renda passiva mensal?",
+    answer:
+      "A ferramenta usa o patrimônio final projetado e aplica uma taxa anual de retirada ou rendimento alvo para converter o valor em média mensal estimada."
+  },
+  {
+    question: "Qual taxa de retirada devo usar?",
+    answer:
+      "Não existe taxa única para todos os perfis. Simule cenários conservadores e agressivos para entender a sensibilidade da renda estimada."
+  },
+  {
+    question: "A renda passiva projetada é garantida?",
+    answer:
+      "Não. O resultado é didático e depende das premissas escolhidas. Use a projeção como base de planejamento, não como promessa de retorno."
+  }
+]
 
 export default function Page() {
   return (
@@ -91,6 +114,17 @@ export default function Page() {
       </section>
 
       <section className="max-w-3xl mx-auto px-6 pb-24">
+        <h2 className="text-2xl font-semibold mb-8">Perguntas frequentes sobre renda passiva</h2>
+
+        <div className="space-y-8">
+          {faqItems.map((item) => (
+            <div key={item.question}>
+              <h3 className="font-semibold text-lg">{item.question}</h3>
+              <p className="text-slate-600 mt-2 leading-relaxed">{item.answer}</p>
+            </div>
+          ))}
+        </div>
+
         <div className="rounded-2xl border border-slate-200 bg-white p-6">
           <p className="text-sm uppercase tracking-[0.2em] text-slate-500">Intenção desta rota</p>
           <p className="mt-3 leading-7 text-slate-700">
@@ -112,6 +146,7 @@ export default function Page() {
               "Ferramenta para estimar patrimônio acumulado e convertê-lo em renda mensal potencial.",
             path: "/simulador-renda-passiva"
           }),
+          buildFaqSchema(faqItems),
           buildBreadcrumbSchema([
             { name: "Início", path: "/" },
             { name: "Calculadora de Renda Passiva", path: "/simulador-renda-passiva" }

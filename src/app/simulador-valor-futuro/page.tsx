@@ -4,7 +4,12 @@ import { Simulator } from "@/components/Simulator"
 import AdSlot from "@/components/ads/AdSlot"
 import { JsonLd } from "@/components/seo/JsonLd"
 import { TrackedLink } from "@/components/TrackedLink"
-import { buildBreadcrumbSchema, buildMetadata, buildWebApplicationSchema } from "@/lib/seo"
+import {
+  buildBreadcrumbSchema,
+  buildFaqSchema,
+  buildMetadata,
+  buildWebApplicationSchema
+} from "@/lib/seo"
 
 export const metadata = buildMetadata({
   title: "Simulador de valor futuro",
@@ -13,6 +18,24 @@ export const metadata = buildMetadata({
   path: "/simulador-valor-futuro",
   keywords: ["simulador de valor futuro", "valor futuro de investimento"]
 })
+
+const faqItems = [
+  {
+    question: "Como calcular o valor futuro sem aportes mensais?",
+    answer:
+      "A projeção aplica a taxa anual ao capital inicial ao longo do prazo definido, convertendo a taxa para base mensal e acumulando os rendimentos mês a mês."
+  },
+  {
+    question: "Quando o simulador de valor futuro é mais útil?",
+    answer:
+      "Ele é ideal quando você já possui um montante inicial e quer comparar diferentes prazos, taxas e inflação sem misturar novos depósitos recorrentes."
+  },
+  {
+    question: "O resultado já considera risco e impostos reais?",
+    answer:
+      "Não. O cálculo é educacional e depende das premissas informadas. Use a simulação como referência para planejamento e não como garantia de rentabilidade."
+  }
+]
 
 export default function Page() {
   return (
@@ -93,6 +116,17 @@ export default function Page() {
       </section>
 
       <section className="max-w-3xl mx-auto px-6 pb-24">
+        <h2 className="text-2xl font-semibold mb-8">Perguntas frequentes sobre valor futuro</h2>
+
+        <div className="space-y-8">
+          {faqItems.map((item) => (
+            <div key={item.question}>
+              <h3 className="font-semibold text-lg">{item.question}</h3>
+              <p className="text-slate-600 mt-2 leading-relaxed">{item.answer}</p>
+            </div>
+          ))}
+        </div>
+
         <div className="rounded-2xl border border-slate-200 bg-white p-6">
           <p className="text-sm uppercase tracking-[0.2em] text-slate-500">Intenção desta rota</p>
           <p className="mt-3 leading-7 text-slate-700">
@@ -114,6 +148,7 @@ export default function Page() {
               "Ferramenta para projetar o valor futuro de um capital inicial ao longo do tempo.",
             path: "/simulador-valor-futuro"
           }),
+          buildFaqSchema(faqItems),
           buildBreadcrumbSchema([
             { name: "Início", path: "/" },
             { name: "Simulador de Valor Futuro", path: "/simulador-valor-futuro" }
